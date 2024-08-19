@@ -1,0 +1,88 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: cursive;
+}
+
+/* #root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: grey;
+} */
+
+.log-box {
+    position: absolute;
+    padding: 40px;
+    background: brown;
+    box-shadow: 0 15px 25px  rgb(77, 19, 19);
+    box-sizing: border-box;
+    border-radius: 10px;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    transform: translate(-50%, -50%);
+}
+
+.h3 {
+    margin: 0 0 30px;
+    padding: 0;
+    text-align: center;
+    color: aliceblue;
+}
+
+.sign-box {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.sign-box input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: aliceblue;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    background: transparent;
+}
+
+.user-name, .user-password {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: aliceblue;
+    pointer-events: none;
+    transition: .5s;
+}
+
+input:focus ~ .user-name, input:valid ~ .user-name, input:focus ~ .user-password, input:valid ~ .user-password {
+    top: -20px;
+    left: 0;
+    color: black;
+    font-size: 12px;
+}
+
+.form {
+    margin-top: 40px;
+}
+/* 
+.form {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 40px;
+    color: #03e9f4;
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    letter-spacing: 4px;
+
+} */

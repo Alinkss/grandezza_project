@@ -1,0 +1,726 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/* .header {
+    background-image: url(../shop/images/pets-background.jpg);
+    background-blend-mode: multiply;
+    background-color: #675a4d;
+    background-size: cover;
+    height: 660px;
+} */
+  
+  .bg-light{
+    background-color: #f0f0f0 !important;
+  }
+  
+  .btn {
+    font-weight: 500;
+    transition: .5s;
+  }
+  
+  .btn.btn-primary {
+    color: #FFFFFF;
+  }
+  
+  .btn-sm-square {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-weight: normal;
+  }
+  
+  .navbar .dropdown-toggle::after {
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+  
+  .navbar-light .navbar-nav .nav-link {
+    margin-right: 30px;
+    padding: 25px 0;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    outline: none;
+  }
+  
+  .navbar-light .navbar-nav .nav-link:hover,
+  .navbar-light .navbar-nav .nav-link.active {
+    color: rgb(238, 151, 93) !important;
+  }
+  .navbar-brand h2 {
+    color: #f76307 !important; /* Set the color to orange and use !important */
+}
+
+  
+  @media (max-width: 991.98px) {
+    .navbar-light .navbar-nav .nav-link  {
+        margin-right: 0;
+        padding: 10px 0;
+    }
+  
+    .navbar-light .navbar-nav {
+        border-top: 1px solid #EEEEEE;
+    }
+  }
+  
+  .navbar-light .navbar-brand,
+  .navbar-light a.btn {
+    height: 75px;
+  }
+  
+  .navbar-light .navbar-nav .nav-link {
+    color: black;
+    font-weight: 500;
+  }
+  
+  .navbar-light.sticky-top {
+    top: -100px;
+    transition: .5s;
+  }
+  
+  @media (min-width: 992px) {
+    .navbar .nav-item .dropdown-menu {
+        display: block;
+        border: none;
+        margin-top: 0;
+        top: 150%;
+        opacity: 0;
+        visibility: hidden;
+        transition: .5s;
+    }
+  
+    .navbar .nav-item:hover .dropdown-menu {
+        top: 100%;
+        visibility: visible;
+        transition: .5s;
+        opacity: 1;
+    }
+  }
+/* .logo-link {
+    width: 300px;
+    background: transparent;
+}
+.img-logo {
+    background: transparent;
+} 
+
+.logo {
+    display: flex;
+    justify-content: space-between;
+    font-size: xx-large;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    padding: 1em;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.btn-a {
+    border-radius: 2em;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    background-color: transparent;
+    right: 105px;
+    padding-top: 10px;
+    padding-left: 27px;
+    padding-right: 27px;
+    transition: ease 300ms;
+    border: none;
+    font-size: large;
+    }
+
+.btn-a:hover {
+    background-color: rgb(212, 20, 20);
+}
+    
+.a-link {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-family: cursive;
+    transition: ease 300ms;
+}
+
+
+.a-link:hover {
+    color: black;
+    text-shadow: 3px 2px 3px wheat;
+} */
+/* 
+
+.slideshow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.slide {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 3s;
+}
+
+@keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}  */
+
+.top {
+    padding: 2em;
+    /* text-align: center; */
+    color: aliceblue;
+    font-size: 2em;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.h4-top {
+    padding-top: 0.3em;
+    font-size: 2.1em;
+}
+.h3-top {
+    padding-top: 0.3em;
+    font-style: italic;
+}
+.span-contacts {
+    padding-top: 1em;
+    font-style: italic;
+}
+.media {
+    padding-top: 2em;
+    font-size: large;
+    font-style: italic;
+}
+
+.main {
+    height: 1000px;
+    background-color: #f7d5bf;
+}
+
+.first-about {
+    text-align: center;
+    padding: 9em;
+}
+
+.about-company {
+    position: relative;
+    top: 2em;
+    font-size: 1.5em;
+    padding: 1em;
+}
+
+.discription {
+    position: relative;
+    top: 3em;
+    font-size: 2em;
+}
+
+.btn-more {
+    position: relative;
+    top: 4em;
+    font-size: 1.7em;
+}
+
+.second-about {
+    padding: 50px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.h6-pets {
+    text-align: center;
+    font-size: larger;
+}
+
+/* main --------------------- */
+
+/* .main {
+  background-color: #f7d5bf;
+} */
+
+/* footer ------- */
+
+.footer-main{
+    padding-top: 90px;
+}
+
+.address-main > div.col-lg-4 {
+    border-bottom: dotted 1px #999;
+}
+.address-box {
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+.add-icon{
+    /* display: inline-block; */
+    float: left;
+    width: 60px;
+    padding: 0px 5px;
+    background: #27303b;
+    height: 75px;
+    line-height: 75px;
+    text-align: center;
+    margin-right: 20px;
+}
+.address-box .add-icon {
+    background: #27303b;
+    height: 75px;
+    line-height: 75px;
+    width: 75px;
+    margin-right: 20px;
+    text-align: center;
+}
+.add-icon img{
+    width: 100%;
+}
+.address-box .add-icon img {
+    max-width: 40px;
+}
+.add-content{
+    padding-left: 70px;
+}
+.add-content h5 {
+    font-size: 17px;
+    color: #ffffff;
+    padding: 0;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.add-content p {
+    font-size: 13px;
+    color: #999999;
+    font-weight: 300;
+}
+.add-content p a{
+    font-size: 14px;
+    color: #999999;
+    font-weight: 300;
+    word-wrap: break-word;
+}
+.add-content p a:hover{
+    color: #ffb32d;
+}
+
+
+/* HERO ------------- */
+
+
+.hero-section {
+    background-image: url(../images/slides/cat-and-dog-lying-on-sofa_New-Africa_Shutterstock.jpg);
+    background-color: var(--dark-color);
+    /* background-color: aliceblue; */
+    position: relative;
+    overflow: hidden;
+    min-height: 620px;
+    text-align: center;
+  }
+  
+  .hero-section::after {
+    background-color: rgba(0, 0, 0, 0.65);
+    border-radius: var(--border-radius-medium);
+    content: "";
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-55%, -50%) rotate(45deg);
+    width: 250px;
+    height: 350px;
+    pointer-events: none;
+  }
+  
+  /* @media screen and (min-width: 991px) {
+    .hero-section {
+      height: 100vh;
+    }
+  } */
+  
+  .hero-section h1 {
+    color: var(--white-color);
+  }
+  
+  .small-text {
+    color: var(--secondary-color);
+  }
+  
+  .hero-section .custom-border-btn {
+    border-color: transparent;
+  }
+  
+  .hero-section .container {
+    position: relative;
+    z-index: 9;
+  }
+
+/* ABOUT SECTION ------------- */
+
+/* .about-section {
+  height: 700px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+} */
+
+
+/* .about-section {
+  padding: 20px;
+} */
+
+.about-company {
+  font-size: 1.5em;
+  /* margin-bottom: 20px; */
+  padding-top: 80px;
+  text-align: center;
+}
+
+.first-about {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: flex-start; */
+}
+
+.about-us-div {
+  display: flex;
+  /* align-items: flex-start; */
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+
+/* .img-about {
+  flex: 1;
+} */
+
+.img-about img {
+  max-width: 100%;
+  height: 400px;
+  display: block;
+}
+
+.text-about {
+  flex: 2;
+}
+
+.discription {
+  position: relative;
+  top: -40px;
+  left: -5px;
+  font-size: 1.2em;
+  margin-bottom: 70px;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.box-about {
+  position: relative;
+  top: -80px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color: #fabfa3;
+  border-left: 8px solid orange;
+}
+
+/* @media (max-width: 768px) {
+  .about-us-div {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .text-about {
+      text-align: center;
+  }
+} */
+
+/* 
+.img{
+  height: 600px;
+} */
+
+/* CAROUSEL -------------------------------------- */
+
+.carousel {
+  height: 600px;
+  position: relative;
+  width: 100%;
+  padding: 10px 40px;
+  border: 1px solid #CCC;
+  border-radius: 15px;
+  background: #eee;
+}
+
+.carousel img {
+  width: 465px;
+  height: 550px;
+  /* делаем этот элемент блочным, чтобы убрать лишнее пространство вокруг картинок */
+  display: block;
+}
+
+.arrow {
+  position: absolute;
+  top: 315px;
+  padding: 0;
+  background: #ddd;
+  border-radius: 15px;
+  border: 1px solid gray;
+  font-size: 24px;
+  line-height: 24px;
+  color: #444;
+  display: block;
+}
+
+.arrow:focus {
+  outline: none;
+}
+
+.arrow:hover {
+  background: #ccc;
+  cursor: pointer;
+}
+
+.prev {
+  left: 7px;
+}
+
+.next {
+  right: 7px;
+}
+
+.gallery {
+  width: 100%;
+  overflow: hidden;
+}
+
+.gallery ul {
+  height: 550px;
+  width: 9999px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: margin-left 250ms;
+  font-size: 0;
+}
+
+.gallery li {
+  display: inline-block;
+}
+
+/* -----------------CONTACTS _----------- */
+
+.contact-section {
+  padding: 60px 0;
+  color: #fff;
+  background: purple;
+}
+
+.contact-section .container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.contact-section .form-label {
+  color: #fff;
+  font-weight: bold;
+}
+
+.contact-section .form-control {
+  background-color: #444;
+  border: 1px solid transparent;
+  color: #fff; 
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.contact-section .form-control::placeholder {
+  color: #ccc;
+}
+
+.contact-section .form-control:focus {
+  border-color: #777;
+  background-color: #555; 
+}
+
+.contact-section .form-control[type="submit"] {
+  background-color: #555; 
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact-section .form-control[type="submit"]:hover {
+  background-color: #666;
+}
+
+.form-contact {
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.form-contact:focus {
+  border-color: #a1a1a1;
+  outline: none;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.section-padding {
+  padding: 60px 0; 
+}
+
+@media (max-width: 768px) {
+  .contact-section .container {
+      padding: 0 20px;
+  }
+}
+
+/* CONTACT ----------- */
+/* 
+  .contact-section {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(188, 108, 37, 1)), url('../images/young-female-barista-wear-face-mask-serving-take-away-hot-coffee-paper-cup-consumer-cafe.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  
+  .google-map {
+    border-radius: var(--border-radius-medium);
+    filter: grayscale(100);
+  }
+  
+  .contact-block-wrap {
+    background: var(--primary-color);
+    border-radius: var(--border-radius-medium);
+    padding: 0;
+    min-height: 200px;
+  }
+  
+  .contact-block {
+    background: var(--secondary-color);
+    border-radius: var(--border-radius-medium);
+    transform: rotate(8deg);
+    height: 100%;
+    padding: 20px 40px;
+  }
+  
+  .contact-block h6 {
+    transform: rotate(-8deg);
+  }
+  
+  .contact-block .custom-icon {
+    background: var(--primary-color);
+    border-radius: var(--border-radius-large);
+    display: block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .contact-block strong {
+    display: block;
+    color: var(--white-color);
+    text-transform: uppercase;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  } */
+
+  /*---------------------------------------
+  CUSTOM FORM               
+-----------------------------------------*/
+.custom-form .form-control {
+    color: var(--p-color);
+    border-radius: var(--border-radius-small);
+    margin-bottom: 30px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    box-shadow: none;
+    outline: none;
+    transition: all 0.3s;
+  }
+  
+  .custom-form .form-control:hover,
+  .custom-form .form-control:focus {
+    background: var(--primary-color);
+    border-color: transparent;
+  }
+  
+  .custom-form .form-label {
+    color: var(--white-color);
+    font-style: italic;
+    margin-bottom: 15px;
+  }
+  
+  .custom-form button[type="submit"] {
+    background: var(--custom-btn-bg-color);
+    border: none;
+    border-radius: var(--border-radius-large);
+    color: var(--white-color);
+    font-size: var(--form-btn-font-size);
+    font-weight: var(--font-weight-bold);
+    transition: all 0.3s;
+    margin-bottom: 0;
+  }
+  
+  .custom-form button[type="submit"]:hover,
+  .custom-form button[type="submit"]:focus {
+    background: var(--white-color);
+    border-color: transparent;
+    color: var(--primary-color);
+  }
+  
+  .contact-form .form-control,
+  .booking-form .form-control {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  
+  .booking-form .form-control {
+    color: var(--white-color);
+  }
+  
+  .custom-form input::-webkit-input-placeholder,
+  .custom-form textarea::-webkit-input-placeholder {
+     color: var(--white-color);
+  }
+  
+  .booking-form input:-moz-placeholder,
+  .booking-form textarea:-moz-placeholder {
+    color: var(--white-color);
+  }
+  

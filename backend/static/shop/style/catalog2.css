@@ -1,0 +1,561 @@
+.header {
+    background-image: url(../images/pets-background.jpg);
+    background-blend-mode: multiply;
+    /* background-color: #675a4d; */
+    background-size: cover;
+    height: 130px;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.row {
+    margin: 0;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.text-start {
+    text-align: left;
+}
+
+.text-end {
+    text-align: right;
+}
+
+.py-3 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.me-4 {
+    margin-right: 1.5rem;
+}
+
+.ms-2 {
+    margin-left: 0.5rem;
+}
+
+.ms-3 {
+    margin-left: 1rem;
+}
+
+.btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.img-fluid {
+    
+    /* max-width: 100%; */
+    background-color: transparent;
+    width: 30px;
+    height: auto;
+}
+
+.img-fluid2 {
+    /* display: flex;
+    justify-content: space-between; */
+    /* max-width: 100%; */
+    background-color: transparent;
+    width: 40px;
+    height: auto;
+}
+
+.card {
+    max-width: 100%; /* Ensure the card doesn’t exceed its container */
+    margin: 0 auto; /* Center the card horizontally if needed */
+}
+
+.card-img-top {
+    height: 200px; /* Set a fixed height for images */
+    object-fit: cover; /* Ensure images cover the area */
+}
+
+.card-body {
+    padding: 15px; /* Adjust padding inside the card */
+}
+
+.card-title {
+    font-size: 1.25rem; /* Adjust font size for the title */
+    font-weight: bold;
+    margin-bottom: 10px; /* Space between title and content */
+}
+
+.card-text {
+    font-size: 1rem; /* Adjust font size for the text */
+    margin-bottom: 10px; /* Space between paragraphs */
+}
+
+.btn-primary {
+    background-color: #8400ff; /* Customize button color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Add padding to the button */
+    border-radius: 5px; /* Rounded corners for the button */
+}
+
+.btn-primary:hover {
+    background-color: #5c00b3; /* Darker color on hover */
+    color: #fff; /* Ensure text is readable on hover */
+}
+
+
+
+
+/* ----------------- RIGHT --------------- */
+
+/* .aside {
+    width: 200px;
+    background: #f8f9fa;
+    padding: 20px;
+}
+
+.category {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.category-link {
+    display: block;
+    padding: 10px 0;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.filter {
+    display: none;
+    padding-left: 10px;
+}
+
+.category-link:hover + .filter, .filter:hover {
+    display: block;
+}
+
+.check-boxes {
+    margin-bottom: 10px;
+}
+
+.form {
+    display: flex;
+    gap: 10px;
+} */
+
+/* ------------------------------------------------ */
+/* 
+.main {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.aside {
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+
+.filter-bar {
+    flex: 0 0 25%;
+    max-width: 25%;
+    position: fixed;
+    top: 0;
+    right: -300px;
+    background: #f0f0f0;
+    height: 100%;
+    padding: 20px;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.filter {
+    display: none;
+}
+
+.filter.active {
+    display: block;
+}
+
+.sort {
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+
+.category ul {
+    list-style: none;
+    padding: 0;
+}
+
+.category ul li {
+    margin-bottom: 10px;
+}
+
+.category-link {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.category-link:hover {
+    text-decoration: underline;
+} */
+
+/* ---------------------------------------- */
+
+/* .main {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.aside {
+    flex: 0 0 20%;
+    max-width: 20%;
+    padding: 20px;
+    position: relative;
+}
+
+.category ul {
+    list-style: none;
+    padding: 0;
+}
+
+.category ul li {
+    margin-bottom: 10px;
+}
+
+.category-link {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.filter {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: calc(100% + 10px);
+    background: #f0f0f0;
+    width: 200px;
+    padding: 10px;
+    z-index: 1000;
+    border-left: 1px solid #ccc;
+}
+
+.category-link:hover + .filter,
+.filter:hover {
+    display: block;
+} */
+
+.main {
+    /* display: flex;
+    justify-content: space-between; */
+    /* margin-top: 20px;
+    background-image: url(../images/catterry-backround.jpg);
+    background-blend-mode: multiply;
+    background-color: #675a4d;
+    background-size: cover; */
+    background-color: rgb(177, 177, 177);
+    margin-top: 20px;
+    flex: 1;
+}
+
+.wrapper {
+    min-height: 100hv;
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.container {
+    flex: 3 1 0; /* Grow to fill available space, and shrink if needed */
+    padding: 20px;
+}
+
+
+.input-search {
+    width: 350px;
+    height: 45px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #ccc;
+    margin-right: 10px;
+}
+
+.btn-search {
+    width: 90px;
+    height: 38px;
+    border-radius: 20px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-search:hover {
+    background-color: #555;
+}
+
+/* Styling for the aside section */
+.aside {
+    width: 300px; /* Adjust width for a square shape */
+    height: 300px; /* Adjust height to match width */
+    border: 1px solid #ccc; /* Border to define the aside area */
+    padding: 20px; /* Space inside the aside */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    background-color: #f9f9f9; /* Background color */
+    overflow-y: auto; /* Add scrollbar if content overflows */
+}
+
+.box-category {
+    display: flex;
+    flex-direction: column;
+}
+
+.category h3 {
+    font-size: 24px; /* Increase text size */
+    margin-bottom: 10px; /* Space below the heading */
+    padding-bottom: 10px; /* Space between text and border */
+    border-bottom: 2px solid #ddd; /* Line at the bottom of the heading */
+    width: 100%; /* Ensure the border spans the full width of the aside */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+/* Styling for category list */
+.category ul {
+    list-style: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+/* Styling for each category list item */
+.category ul li {
+    border-bottom: 1px solid #ddd; /* Line between items */
+    padding: 10px 0; /* Space around each item */
+}
+
+/* Styling for category links */
+.category-link {
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Text color */
+    font-size: 18px; /* Increase font size for category links */
+    display: block; /* Make links block-level to fill container width */
+    width: 100%; /* Ensure the link spans the full width */
+}
+
+/* Change color on hover */
+.category-link:hover {
+    color: #6f00ff; /* Change color on hover */
+}
+
+/* .aside {
+    flex: 0 0 20%;
+    max-width: 300px;
+    padding: 20px;
+    position: relative; 
+    height:400px;
+    background-color: #f0f0f0;
+}
+
+.box-category {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 1.5em;
+}
+
+.category ul {
+    list-style: none;
+    padding: 0;
+}
+
+.category ul li {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.category-link {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.filter {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: calc(100% + 10px);
+    background: #f0f0f0;
+    width: 200px;
+    padding: 10px;
+    z-index: 1000;
+    border-left: 1px solid #ccc;
+}
+
+.category-link:hover + .filter,
+.filter:hover {
+    display: block;
+}
+.h1-filter {
+    text-align: center;
+    font-size: medium;
+}
+
+.filter-group {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.h1-filter-price {
+    text-align: left;
+    font-size: large;
+}
+
+.h1-filter-group {
+    font-size: small;
+    display: flex;
+    justify-content: space-around;
+} */
+
+/* ------------------ PRODUCTS ------------------ */
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.show-prod {
+    width: 200px;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.prod-img {
+    width: 150px;
+    height: 200px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.prod-info {
+    /* background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    text-align: center; */
+    background-color: rgba(0, 0, 0, 0.6); /* Darker and more transparent */
+    padding: 10px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.prod-info h1 {
+    font-size: 1.2em;
+    margin: 5px 0;
+}
+
+.prod-info p {
+    margin: 2px 0;
+}
+
+
+/* 
+----------------------------------------------- PRODUCT Contauner ---------------------------- */
+
+
+.custom-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.custom-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.custom-col {
+    flex: 1 1 300px; /* Adjust to a minimum width of 300px */
+}
+
+.custom-product-card {
+    width: 300px; /* Set the width of the card to 300px */
+    background-color: #fff; /* White background for the card */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center-align items */
+    padding: 10px;
+    text-align: center; /* Center-align text */
+}
+
+.custom-product-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-product-body {
+    padding: 10px;
+}
+
+.custom-product-title {
+    font-size: 16px; /* Adjust font size for smaller card */
+    margin: 10px 0;
+}
+
+.custom-product-price,
+.custom-product-category {
+    margin: 5px 0;
+}
+
+.custom-button {
+    display: inline-block;
+    padding: 8px 16px; /* Adjust padding for smaller button */
+    margin-top: 10px;
+    background-color: #e100ff; /* Button background color */
+    color: #fff; /* Button text color */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px; /* Adjust font size for smaller button */
+    text-align: center;
+}
+
+.custom-button:hover {
+    background-color: #5c00b3; /* Button hover color */
+}

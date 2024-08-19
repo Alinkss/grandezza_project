@@ -1,0 +1,35 @@
+.form-container {
+    background-color: #f0f0f0; /* Grey background */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    margin-bottom: 20px;
+    max-width: 500px; /* Set a max-width for the container */
+    margin: auto; /* Center the container */
+}
+
+/* Style for the form inputs */
+.form-container input, 
+.form-container select, 
+.form-container textarea {
+    width: calc(100% - 20px); /* Make inputs slightly smaller than the container */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Rounded corners for inputs */
+}
+
+/* Style for the submit button */
+.btn-submit {
+    background-color: #007bff; /* Blue background */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Optional: Style for the submit button on hover */
+.btn-submit:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}

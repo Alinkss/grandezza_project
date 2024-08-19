@@ -1,0 +1,167 @@
+.main {
+    /* margin-top: 20px;
+    background-image: url(../images/catterry-backround.jpg);
+    background-blend-mode: multiply;
+    background-color: #675a4d;
+    background-size: cover; */
+    background-color: rgb(177, 177, 177);
+    margin-top: 20px;
+}
+
+/* .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.container {
+    flex: 3 1 0; 
+    padding: 20px;
+} */
+
+/* .aside {
+    flex: 1 1 300px; 
+    max-width: 300px;
+    padding: 20px;
+    height: 400px;
+    background-color: #f0f0f0;
+} */
+
+/* .aside {
+    width: 300px;
+    height: 300px; 
+    border: 1px solid #ccc;
+    padding: 20px; 
+    box-sizing: border-box; 
+    background-color: #f9f9f9;
+    overflow-y: auto; 
+}
+
+.box-category {
+    display: flex;
+    flex-direction: column;
+}
+
+.category ul {
+    list-style: none;
+    padding: 0;
+}
+
+.category ul li {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.category-link {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.filter {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: calc(100% + 10px);
+    background: #f0f0f0;
+    width: 200px;
+    padding: 10px;
+    z-index: 1000;
+    border-left: 1px solid #ccc;
+}
+
+.category-link:hover + .filter,
+.filter:hover {
+    display: block;
+}
+.h1-filter {
+    text-align: center;
+    font-size: medium;
+}
+
+.filter-group {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.h1-filter-price {
+    text-align: left;
+    font-size: large;
+}
+
+.h1-filter-group {
+    font-size: small;
+    display: flex;
+    justify-content: space-around;
+} */
+
+
+.aside {
+    width: 300px; /* Adjust width for a square shape */
+    height: 800px; /* Adjust height to match width */
+    border: 1px solid #ccc; /* Border to define the aside area */
+    padding: 20px; /* Space inside the aside */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    background-color: #f9f9f9; /* Background color */
+    overflow-y: auto; /* Add scrollbar if content overflows */
+}
+
+.category {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.h1-filter {
+    text-align: center;
+    font-size: medium;
+}
+
+.h1-filter-price {
+    text-align: left;
+    font-size: large;
+}
+
+.h1-filter-group {
+    font-size: small;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Style for the filter headings */
+.filter-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+/* Style for the checkboxes */
+.check-boxes label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* Style for the price filter section */
+.price-filter {
+    margin-top: 20px;
+}
+
+/* Style for price filter labels and inputs */
+.filter-label {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.filter-group {
+    margin-top: 10px;
+}
+
+.categories-a {
+    font-size: x-large;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}

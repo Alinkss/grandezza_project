@@ -1,0 +1,149 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.main-content {
+    /* width: 100%; */
+    padding: 0;
+}
+
+.box-text-profile{
+    border-bottom: 2px solid grey;
+    padding-bottom: 20px;
+    display: flex;
+    padding-right: 28em;
+    padding-top: 1em;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.box-text-profile .back-arrow {
+    display: flex;
+    align-items: center;
+    padding-left: 3em;
+}
+
+.box-h1 {
+    font-size: large;
+    color: rgb(77, 77, 77);
+    font-weight: bold;
+}
+
+.profile-box {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    border-bottom: 2px dashed grey;
+    display: flex; /* Use flexbox to align items */
+    align-items: center; /* Center items vertically */
+    padding-top: 1em; /* Adjust padding as needed */
+}
+
+.profile-ul {
+    position: absolute;
+    bottom: 10px; /* Adjust to position below avatar */
+    right: 20px; /* Adjust to position on the right side */
+    z-index: 2; /* Above background */
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-ul a {
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: #dc3545;
+}
+
+.profile-ul a:last-child {
+    border-radius: 50px;
+    border: 2px solid black;
+    background-color: #ffffff; /* Bootstrap link color */
+    color: rgb(0, 0, 0);
+}
+
+.profile-box img.background-pic {
+    position: absolute; /* Position background image absolutely */
+    top: 0;
+    left: 0;
+    width: 100%; /* Cover full width */
+    height: 170px; /* Cover full height */
+    object-fit: cover; /* Ensure image covers the container */
+    z-index: 1; /* Ensure it's behind other content */
+}
+
+.user-avatar {
+    position: relative; /* Position avatar relative to this container */
+    z-index: 2; /* Ensure it's above the background image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px; /* Space between avatar and text */
+    padding-left: 20px;
+}
+
+.img-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 5px solid white; /* White border around avatar */
+    object-fit: cover; /* Ensure avatar image fits well */
+    z-index: 2; /* Ensure it’s above the background */
+    position: relative; /* Relative position within user-avatar */
+}
+
+.info-about {
+    display: flex;
+    flex-direction: column;
+    padding-left: 40px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    color: rgb(97, 97, 97);
+    padding-right: 20px;
+    /* padding-top: 11px; */
+    /* margin-bottom: 2px; */
+}
+
+.user-p {
+    margin-right: 10px;
+}
+
+.another-p {
+    color: black;
+    font-weight: bold;
+}
+
+.my-padding {
+    padding-top: 10px;
+}
+
+.box-for-num {
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px;
+    color: #000;
+}
+
+.post-box {
+    width: 100%;
+    border-bottom: 1.6px solid #e2e2e2;
+    box-sizing: border-box;
+}

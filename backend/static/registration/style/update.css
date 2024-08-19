@@ -1,0 +1,51 @@
+.box-text {
+    border-bottom: 2px dashed grey;
+    padding-bottom: 7px;
+}
+
+.box-h1-update {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.box-p {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.box {
+    background-color: #ffffff;
+    border: 13px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 1em;
+}
+
+.box-update {
+    padding-top: 1.5em;
+}
+
+.get-info {
+    margin-bottom: 15px;
+    flex: 1;
+}
+
+.get-info label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.get-info input, .get-info select, .get-info textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+}
