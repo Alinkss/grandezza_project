@@ -1,0 +1,42 @@
+{% extends "cart/cart_base.html" %}
+
+{% block content %}
+{% load static %}
+
+{% if cart %}
+<div class="container-cart">
+    <div class="product-list">
+        {% for item in cart %}
+            <div class="product-box">
+                <div class="product-image">
+                    <img src="{{ item.pet.images.url }}" alt="{{ item.pet.name }}">
+                </div>
+                <div class="product-details">
+                    <h5 class="product-name">{{ item.pet.name }}</h5>
+                    <a href="{% url 'cart_remove' item.id %}" class="btn btn-danger remove-button">Remove</a>
+                </div>
+                <div class="product-price">
+                    <p>Price: {{ item.price }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="order-summary">
+        <p>Choose:</p>
+        <a href="{% url 'catalog' %}" class="btn btn-secondary">Continue shopping</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'order_created' user.id %}" class="btn btn-primary">Make order</a>
+        {% else %}
+            <a href="{% url 'order_created_without_user' %}" class="btn btn-primary">Make order</a>
+        {% endif %}
+        <p class="total-cost">Total: ${{ cart.get_total_price }}</p>
+    </div>
+</div>
+{% else %}
+{% comment %} <h3> Your cart is empty </h3> {% endcomment %}
+<div class="cart-empty">
+    <img src="{% static 'shop/images/an-cart-empty.png'%}" alt="#" class="img-cart-empty">
+</div>
+{% endif %}
+
+{% endblock content %}

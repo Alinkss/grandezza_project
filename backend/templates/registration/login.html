@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="{% static 'registration/style/login.css'%}">
+    <link rel="stortcut icon" href="{% static 'shop/images/cat icon.png'%}" type="image/x-icon">
+</head>
+<body>
+    <div id="root">
+        <nav class="nav-link">
+            <a href="{% url 'main' %}"> Main </a>
+        </nav>
+        <div class="log-box">
+            <h3 class="h3">
+                Log in
+            </h3>
+            <form class="form" action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="sign-box">
+                    <input type="text" name="username" id="email" required>
+                    <label class="user-name">
+                        User name
+                    </label>
+                </div>
+                <div class="sign-box">
+                    <input type="password" name="password" id="password" required>
+                    <label class="user-password">
+                        Password
+                    </label>
+                </div>
+                <button type="submit"> Sign in </button>
+                <button class="button-create">
+                    <a href="{% url 'registration'%}" class="a-link">
+                        Register
+                    </a>
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

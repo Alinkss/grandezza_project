@@ -1,0 +1,122 @@
+{% extends "blog/base_blog.html" %}
+
+{% block content %} 
+
+<div class="box-text-profile">
+    <h1 class="box-h1"> {{ user.username }} </h1>
+</div>
+<div class="profile-box">
+    <div class="user-avatar">
+        <img src="{{ user.profile.avatar.url }}" alt="#" class="img-avatar">
+    </div>
+     <div class="info-about">
+         <div class="user-info">
+             <p class="user-p"> First name: </p> <p class="another-p"> {{user.first_name }} </p>   
+         </div>
+        <div class="user-info">
+            <p class="user-p"> User name: </p> <p class="another-p"> @{{ user.username }} </p>     
+        </div>
+        <div class="user-info">
+            <p class="user-p"> Last name: </p> <p class="another-p"> {{user.last_name}} </p>  
+        </div>
+        <div class="user-info">
+            <p class="user-p"> Email: </p> <p class="another-p"> {{user.email }} </p>
+        </div>
+        <div class="user-info">
+            <p class="user-p"> Register data: </p> <p class="another-p"> {{ user.date_joined }} </p>
+        </div>
+        <div class="user-info">
+            <p class="user-p"> Country: </p> <p class="another-p"> {{ user.profile.country }} </p>
+        </div>
+        <div class="user-info">
+            <p class="user-p"> City: </p> <p class="another-p"> {{ user.profile.city }} </p>
+        </div>
+        <div class="user-info">
+            <p class="user-p"> Telephone: </p> <p class="another-p"> {{ user.profile.telephone }} </p>
+        </div>
+        <div class="user-info">
+            <p class="user-p"> Adress: </p> 
+            {% if adresses %}
+
+                {% for adress in adresses %}
+                        <p class="user-p"> Street: </p> 
+                        <p class="another-p"> {{ adress.street }} </p>
+            
+                        <p class="user-p"> House number: </p> 
+                        <p class="another-p"> {{ adress.private_house_number }} </p>
+
+                        {% if adress.entrance_number %}
+                            <p class="user-p"> Entrance number: </p> 
+                            <p class="another-p"> {{ adress.entrance_number }} </p>
+                        {% endif %}
+            
+                        {% if adress.flat_num %}
+                            <p class="user-p"> Flat number: </p> 
+                            <p class="another-p"> {{ adress.flat_num}} </p>
+                        {% endif %}
+                {% endfor %}
+            
+            {% else %} 
+                <p class="another-p">No addresses available.</p>
+            {% endif %}
+        </div>
+        <ul class="nav navbar-nav navbar-left my-padding">
+            <a href="{% url 'logout' %}" class="btn btn-danger"> Logout </a>
+        </ul>
+    </div>
+</div>
+<div class="profile-box">
+    <div class="info-about">
+        <div class="user-info">
+            <p class="user-p"> Number of posts: </p> 
+            <div class="box-for-num">
+                <p class="another-p"> {{ posts_number }} </p>
+            </div>
+        </div>
+        <div class="user-info">
+            <p class="user-p"> Number of comments: </p> 
+            <div class="box-for-num">
+                <p class="another-p"> {{ comments_number }} </p>
+            </div>
+        </div>
+        <div class="user-info">
+            <p class="user-p"> Days since registration: </p> 
+            <div class="box-for-num">
+                <p class="another-p"> {{ days_since_register }} </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box-text-profile">
+    <h1 class="box-h1"> Posts: </h1>
+</div>
+<div class="profile-box">
+    {% for post in posts %}
+        <div class="info-about">
+            <h1>
+                <a href="{% url 'post' post.pk%}">
+                    {{ post.title }}
+                </a>
+            </h1>
+                <p class="lead">
+                    by <a href="{% url 'main'%}">{{ post.user }}</a>
+                </p>
+                
+                <hr>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on {{post.published_date}}</p>
+                <hr>
+                {% for image in post.postimage_set.all %}
+                    <img class="img-responsive" src={{ image.image.url }} alt="">
+                {% endfor %}
+                <hr>
+                <p class="lead"> {{post.content }} </p>
+                
+                <hr>
+            </div>
+        {% endfor %}
+</div>
+
+
+
+
+{% endblock content %} 

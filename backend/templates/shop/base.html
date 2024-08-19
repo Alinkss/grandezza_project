@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grandezza</title>
+    <link rel="stylesheet" href="{% static 'shop/style/main.css' %}">
+    <link rel="stortcut icon" href="{% static 'shop/images/cat icon.png' %}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&display=swap" rel="stylesheet"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+</head>
+<body>
+    <div id="root">
+        <header class="header" style="background-image: url('{% static 'shop/images/slides/cat-and-dog-lying-on-sofa_New-Africa_Shutterstock.jpg'%}')">
+            <div class="logo">
+
+                <div class="container-fluid bg-light p-0">
+                    <div class="row gx-0 d-none d-lg-flex">
+                        <div class="col-lg-7 px-5 text-start">
+                            <div class="h-100 d-inline-flex align-items-center py-3 me-4">
+                                <small class="fa fa-map-marker-alt text-primary me-2"></small>
+                                <small>Gagarin Street, Dnipro, Ukraine</small>
+                            </div>
+                            <div class="h-100 d-inline-flex align-items-center py-3">
+                                <small class="far fa-clock text-primary me-2"></small>
+                                <small>Every time!</small>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 px-5 text-end">
+                            <div class="h-100 d-inline-flex align-items-center py-3 me-4">
+                                <small class="fa fa-phone-alt text-primary me-2"></small>
+                                <small>+38(050)456-38-77</small>
+                            </div>
+                            <div class="h-100 d-inline-flex align-items-center">
+                                <a class="btn btn-sm-square bg-white text-primary me-1" href=""><i class="fab fa-facebook-f"></i></a>
+                                <a class="btn btn-sm-square bg-white text-primary me-1" href=""><i class="fab fa-twitter"></i></a>
+                                <a class="btn btn-sm-square bg-white text-primary me-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                                <a class="btn btn-sm-square bg-white text-primary me-0" href=""><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
+                    <a href="{% url 'main' %}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+                        <h2 class="m-0 text-primary">Grandezza</h2>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <div class="navbar-nav ms-auto p-4 p-lg-0">
+                            <a href="{% url 'main' %}" class="nav-item nav-link active">Home</a>
+                            <a href="{% url 'catalog' %}" class="nav-item nav-link">Catalog</a>
+                            <a href="{% url 'blog_main' %}" class="nav-item nav-link">Blog</a>
+                            <a href="{% url 'registration' %}" class="nav-item nav-link">Login</a>
+                            {% comment %} <a href="{% url 'registration' %}" class="nav-item nav-link">Register</a> {% endcomment %}
+
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'profile' user.id %}" class="nav-item nav-link">Profile </a>
+                            {% endif %}
+
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                                <div class="dropdown-menu fade-up m-0">
+                                    <a href="#" class="dropdown-item">Create your blog</a>
+                                    <a href="#" class="dropdown-item">Search blog</a>
+                                    <a href="#" class="dropdown-item">###</a>
+                                    <a href="#" class="dropdown-item">###</a>
+                                </div>
+                            </div>
+                            <a href="#" class="nav-item nav-link">Contact</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+    
+              <div class="container">
+                  <div class="row align-items-center">
+  
+                      <div class="col-lg-6 col-12 mx-auto">
+                          <em class="small-text" style="color: white;">welcome to Grandezza</em>
+                          
+                          <h1 style="color: #ffb32d;">Grandezza</h1>
+  
+                          <p class="text-white mb-4 pb-lg-2">
+                              your <em>favourite</em> nursery
+                          </p>
+  
+                          <a class="btn custom-btn custom-border-btn smoothscroll me-3" href="#" style="color: white;">
+                              Our Story
+                          </a>
+  
+                          <a class="btn custom-btn smoothscroll me-2 mb-2" href="{% url 'catalog' %}" style="color: white;"><strong>Catalog</strong></a>
+                      </div>
+  
+                  </div>
+                  <div class="hero-slides"></div>
+              </div>
+          </section>
+        </header>
+
+        {% block content %}
+        {% endblock content %}
+
+        <footer class="footer-main bg-dark">
+            <div class="container">
+              <div class="row address-main">
+                <div class="col-lg-4 col-sm-12 col-xs-12">
+                  <div class="address-box clearfix">
+                    <div class="add-icon">
+                      <img src="{% static 'shop/images/geo.png' %}" alt="" />
+                    </div>
+                    <div class="add-content">
+                      <h5>Address</h5>
+                      <p> вулиця Марії Кюрі, 5, Дніпро, Дніпропетровська область, 49000</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-12 col-xs-12">
+                  <div class="address-box clearfix">
+                    <div class="add-icon">
+                      <img src="{% static 'shop/images/Phone_icon.png' %}" alt="" />
+                    </div>
+                    <div class="add-content">
+                      <h5>Phone</h5>
+                      <p>  +380 (67) 944 97 56 <br />
+                        +380 (50) 456 38 77  </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-12 col-xs-12">
+                  <div class="address-box clearfix">
+                    <div class="add-icon">
+                      <img src="{% static 'shop/images/email png.jpg' %}" alt="" />
+                    </div>
+                    <div class="add-content">
+                      <h5>Email</h5>
+                      <p> <a href="mailto:" style="text-decoration:none">alinka30.007@gmail.com </a> </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+
+          <footer class="bg-dark text-center text-white">
+
+          <div class="container p-4 pb-0">
+
+            <section class="mb-4">
+
+              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="fa fa-facebook-f"></i>
+              </a>
+          
+
+              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="fa fa-twitter"></i>
+              </a>
+          
+              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="fa fa-google"></i>
+              </a>
+          
+              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <i class="fa fa-instagram"></i>
+              </a>
+          
+            </section>
+          </div>
+ 
+          <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+          © 2024 All Rights Reserved.
+          </div>
+          </footer>
+          </footer>
+    </div>
+    <script src="{% static 'shop/js/main.js'%}"></script>
+    <script src="{% static 'shop/js/general.js'%}"></script>
+</body>
+</html>

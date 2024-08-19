@@ -1,0 +1,208 @@
+{% extends "shop/base_prod.html" %}
+
+{% block content %}
+
+    {% comment %} {% if product %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ product.images.url }}" class="card-img-top" alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">Price: {{ product.price }}</p>
+                        <p class="card-text">Category: {{ product.category }}</p>
+                        <form action="{% url 'cart_add' product.id %}" method="POST">
+                            {% csrf_token %}
+                            {{ cart_product_form.as_p }}
+                            <input type="hidden" name="quantity" value="1">
+
+                            <input type="submit" value="add to cart" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <h1>
+        Product nor found
+    </h1>
+    {% endif %} {% endcomment %}
+{% if product %}
+
+
+<div class="product-container">
+    <div class="product-row">
+        <div class="product-column">
+            <div class="image-card">
+                <img src="{{ product.images.url }}" class="product-image" alt="{{ product.name }}">
+            </div>
+            <div class="info-cards">
+                <div class="name-card">
+                    <h5 class="product-title">{{ product.name }}</h5>
+                </div>
+                <div class="grey-interlayer"></div>
+                <div class="desc-card">
+                    <p class="desc"> {{ product.description }} </p>
+                    <div class="info-items">
+                        <div class="info-box">
+                            <p class="info-text">{{ product.category }}</p>
+                        </div>
+            
+                        <div class="info-box">
+                            <p class="info-text">{{ product.gender }}</p>
+                        </div>
+            
+                        {% if product.breed %}
+                        <div class="info-box">
+                            <p class="info-text">{{ product.breed }}</p>
+                        </div>
+                        {% endif %}
+            
+                        {% if product.size %}
+                        <div class="info-box">
+                            <p class="info-text">{{ product.size }}</p>
+                        </div>
+                        {% endif %}
+            
+                        {% if product.fur %}
+                        <div class="info-box">
+                            <p class="info-text">{{ product.fur }}</p>
+                        </div>
+                        {% endif %}
+            
+                        {% if product.coat %}
+                        <div class="info-box">
+                            <p class="info-text">{{ product.coat }}</p>
+                        </div>
+                        {% endif %}
+            
+                        {% if product.color %}
+                        <div class="info-box">
+                            <p class="info-text">{{ product.color }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="price-card">
+                    <p class="product-price">Price: ${{ product.price }}</p>
+                    <form action="{% url 'cart_add' product.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ cart_product_form.as_p }}
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="submit" value="Add to Cart" class="add-to-cart-button">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %} <section id="testimonials">
+    <div class="testimonial-heading">
+        <span>Comments</span>
+        <h4>Clients Says</h4>
+    </div>
+    <div class="testimonial-box-container">
+        <div class="testimonial-box">
+            <div class="box-top">
+                <div class="profile">
+                    <div class="profile-img">
+                        <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                    </div>
+                    <div class="name-user">
+                        <strong>Liam mendes</strong>
+                        <span>@liammendes</span>
+                    </div>
+                </div>
+                <div class="reviews">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+            </div>
+            <div class="client-comment">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a. Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.</p>
+            </div>
+        </div>
+        <div class="testimonial-box">
+            <div class="box-top">
+                <div class="profile">
+                    <div class="profile-img">
+                        <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                    </div>
+                    <div class="name-user">
+                        <strong>Noah Wood</strong>
+                        <span>@noahwood</span>
+                    </div>
+                </div>
+                <div class="reviews">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="client-comment">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a. Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.</p>
+            </div>
+        </div>
+        <div class="testimonial-box">
+            <div class="box-top">
+                <div class="profile">
+                    <div class="profile-img">
+                        <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                    </div>
+                    <div class="name-user">
+                        <strong>Oliver Queen</strong>
+                        <span>@oliverqueen</span>
+                    </div>
+                </div>
+                <div class="reviews">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+            </div>
+            <div class="client-comment">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a. Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.</p>
+            </div>
+        </div>
+        <div class="testimonial-box">
+            <div class="box-top">
+                <div class="profile">
+                    <div class="profile-img">
+                        <img src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png" />
+                    </div>
+                    <div class="name-user">
+                        <strong>Barry Allen</strong>
+                        <span>@barryallen</span>
+                    </div>
+                </div>
+                <div class="reviews">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+            </div>
+            <div class="client-comment">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, quaerat quis? Provident temporibus architecto asperiores nobis maiores nisi a. Quae doloribus ipsum aliquam tenetur voluptates incidunt blanditiis sed atque cumque.</p>
+            </div>
+        </div>
+    </div>
+</section> {% endcomment %}
+
+{% endif %}
+
+
+
+
+{% endblock content %}
+

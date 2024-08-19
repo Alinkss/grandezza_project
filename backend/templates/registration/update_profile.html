@@ -1,0 +1,82 @@
+{% extends "blog/base_blog.html" %}
+
+{% block content %}
+<div class="box">
+    <div class="box-text">
+        <h1 class="box-h1-update"> My profile </h1>
+        <p class="box-p"> Edit your profile </p>
+    </div>
+    <div class="box-update">
+        <form action="{% url 'update_profile' %}" method='POST' enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-row">
+                <div class="get-info">
+                    <label for="id_username">Username:</label>
+                    {{ user_update_form.username }}
+                </div>
+                <div class="get-info">
+                    <label for="id_first_name">First name:</label>
+                    {{ user_update_form.first_name }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="get-info">
+                    <label for="id_last_name">Last name:</label>
+                    {{ user_update_form.last_name }}
+                </div>
+                <div class="get-info">
+                    <label for="id_first_name">Email:</label>
+                    {{ user_update_form.email }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="get-info">
+                    <label for="id_country"> Country:</label>
+                    {{ profile_update.country }}
+                </div>
+                <div class="get-info">
+                    <label for="id_city"> City:</label>
+                    {{ profile_update.city }}
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="id_Adress"> Adress:</label>
+                {{ adress_setform.management_form }}
+
+                {% if adress_setform.non_form_errors %}
+                    <div class="alert alert-danger">
+                        {{ adress_setform.non_form_errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div id="addresses">
+                {% for form in adress_setform %}
+                    <div class="get-info">
+                        {{ form.non_field_errors }}
+                        {{ form.as_p }}
+                    </div>
+                {% empty %}
+                    <div class="get-info">
+                        {{ adress_setform.empty_form.non_field_errors }}
+                        {{ adress_setform.empty_form.as_p }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-row">
+                    <div class="form-row">
+                      <div class="get-info">
+                        <label for="id_telephone">Telephone:</label>
+                        {{ profile_update.telephone }}
+                      </div>
+                      <div class="get-info">
+                        <label for="id_avatar">Avatar:</label>
+                        {{ avatar_form.avatar }}
+                      </div>
+                    </div>
+            </div>
+            <button type="submit" class="btn btn-success"> Save </button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

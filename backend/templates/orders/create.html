@@ -1,0 +1,67 @@
+{% extends "cart/cart_base.html" %}
+
+{% block content %}
+
+{% comment %} <h3> Your order </h3>
+
+{% for item in cart %}
+    <li>
+        {{ item.pet.name }} x {{ item.quantity }}
+        <span>
+            {{ item.total_price }}
+        </span>
+    </li>
+{% endfor %} {% endcomment %}
+
+<div class="container-cart">
+    <div class="product-list">
+        {% for item in cart %}
+            <div class="product-box">
+                <div class="product-image">
+                    <img src="{{ item.pet.images.url }}" alt="{{ item.pet.name }}">
+                </div>
+                <div class="product-details">
+                    <h5 class="product-name">{{ item.pet.name }}</h5>
+                    <a href="{% url 'cart_remove' item.id %}" class="btn btn-danger remove-button">Remove</a>
+                </div>
+                <div class="product-price">
+                    <p >Price: {{ item.price }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if user.is_authenticated %}
+        <form action="{% url 'order_created' user.id %}" method="POST">
+            {% csrf_token %}
+            <p class="total-cost">
+                Total : ${{ cart.get_total_price }}
+            </p>
+            <div class="form-container">
+                {{ form.as_p }}
+            </div>
+            <input type="submit" value="Make order" class="custom-button">
+        </form>
+    {% else %}
+        <form action="{% url 'order_created_without_user' %}" method="POST">
+            {% csrf_token %}
+            <p class="total-cost">
+                Total : ${{ cart.get_total_price }}
+            </p>
+            <div class="form-container">
+                {{ form_dont_login.as_p}}
+            </div>
+            <input type="submit" value="Make order" class="custom-button">
+        </form>
+    
+    {% endif %}
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock content %}

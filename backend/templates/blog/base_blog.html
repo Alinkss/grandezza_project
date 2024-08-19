@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grandezza</title>
+    <link rel="stylesheet" href="{% static 'shop/style/main.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/style/general.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/style/blog.css' %}">
+    <link rel="stortcut icon" href="{% static 'shop/images/cat icon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'registration/style/profile.css'%}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.css" rel="stylesheet">
+
+</head>
+<body>
+        <div class="container-main">
+          <aside class="left-sidebar">
+              <h3>                            
+                <a href="{% url 'main' %}" class="nav-item nav-link active">
+                  Back to shop
+                </a>
+              </h3>
+              <ul>
+                <div class="image-link-container">
+                    <img src="{% static 'blog/images/home page.png'%}" alt="smth went wrong" class="small-img">
+                    <li><a href="{% url 'blog_main' %}" class="a-link-class"> Main </a></li>
+                </div>
+                {% if not user.is_authenticated %}
+                <div class="image-link-container">
+                    <img src="{% static 'blog/images/registration-1.png' %}" alt="#" class="small-img-register">
+                    <li>
+                      <a href="{% url 'registration' %}" class="a-link-class"> Registration </a>
+                    </li>
+                </div>
+                <div class="image-link-container">
+                    <img src="{% static 'blog/images/login.png' %}" alt="#" class="small-img-login">
+                    <li>
+                      <a href="{% url 'registration' %}" class="a-link-class">Login</a>
+                    </li>
+                </div>
+                {% endif %}
+                  {% if user.is_authenticated %}
+                  <div class="image-link-container">
+                    <img src="{% static 'blog/images/profile.png' %}" alt="#" class="small-img-profile">
+                    <li>
+                        <a href="{% url 'profile' user.id %}" class="a-link-class"> Profile</a>
+                    </li>
+                  </div>
+                  <div class="image-link-container">
+                    <img src="{% static 'blog/images/create.png'%}" alt="#" class="small-img-create">
+                    <li><a href="{% url 'create' %}" class="a-link-class"> Create post </a></li>
+                  </div>
+                  {% endif %}
+              </ul>
+          </aside>
+          <main class="main-content">
+
+            {% block content %}
+            {% endblock content %}
+
+          </main>
+          <aside class="right-sidebar">
+            <form action="{% url 'search' %}" method='GET'>
+              <div class="div-search">
+                  <input type="search" name="query-search" placeholder='search' class='input-search'>
+                  <button type="submit" class='btn-search'> Search </button>
+              </div>
+          </form>
+            <h3 class="news-title">News</h3>
+            <div class="categories-container">
+                <h4 class="categories-title">Categories</h4>
+                <hr class="categories-divider">
+                <ul class="additional-categories">
+                    {% for category in categories %}
+                    <li class="category-item">
+                        <a href="{% url 'blog_categories' category.id %}" class="category-link">
+                            {{ category.name }}
+                        </a>
+                        <span class="category-post-count">({{ number_of_posts }} posts)</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+              {% comment %} <h3>News</h3>
+              <form action="{% url 'search' %}" method='GET'>
+                  <div class="div-search">
+                      <input type="search" name="query" placeholder='search' class='input-search'>
+                      <button type="submit" class='btn-search'> Search </button>
+                  </div>
+              </form>
+              <div class="category-row">
+                  <div class="category-name">
+                      <ul class='category-list'>
+                          {% for category in category_obj %}
+                          <li>
+                              <a href="{% url 'blog_categories' %}"> {{ category.name }}</a>
+                          </li>
+                          {% endfor %}
+                      </ul>
+  
+                  </div>
+              </div>
+              <ul>
+                  {% for category in categories %}
+                      <li>
+                          <a href="{% url 'blog_categories' category.id %}"> 
+                              {{ category.name }} 
+                          </a>
+                      </li>
+                  {% endfor %}
+              </ul> {% endcomment %}
+          </aside>
+        </div>
+    {% comment %} <script src="{% static 'shop/js/main.js' %}"></script>
+    <script src="{% static 'shop/js/general.js' %}"></script> {% endcomment %}
+    <script src="{% static 'blog/js/profile.js' %}"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.js"></script>
+</body>
+</html>

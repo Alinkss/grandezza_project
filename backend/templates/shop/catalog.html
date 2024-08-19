@@ -1,0 +1,56 @@
+{% extends "shop/base_catalog.html" %}
+
+{% block content %}
+
+{% comment %} <div class="container">
+    <div class="row">
+        {% for pet in pets %}
+        <div class="col-md-4 mb-4"> <!-- Adjust column width based on your layout -->
+            <div class="card">
+                <img src="{{ pet.images.url }}" class="card-img-top" alt="{{ pet.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ pet.name }}</h5>
+                    <p class="card-text">Price: {{ pet.price }}</p>
+                    <p class="card-text">Category: {{ pet.category }}</p>
+                    <a href="{% url 'product_detail' pet.id %}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div> {% endcomment %}
+
+<div class="custom-container">
+    <div class="custom-row">
+        {% for pet in pets %}
+        <div class="custom-col">
+            <div class="custom-product-card">
+                <img src="{{ pet.images.url }}" class="custom-product-image" alt="{{ pet.name }}">
+                <div class="custom-product-body">
+                    <h5 class="custom-product-title">{{ pet.name }}</h5>
+                    <p class="custom-product-price">Price: ${{ pet.price }}</p>
+                    <p class="custom-product-category">Category: {{ pet.category }}</p>
+                    <a href="{% url 'product_detail' pet.id %}" class="custom-button">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% comment %} <div class="products">
+    {% for pet in pets %}
+    <div class="show-prod">
+        <div class="prod-info">
+            <img src="{{ pet.images.url }}" alt="{{ pet.name }}" class="prod-img">
+            <a href="{% url 'product_detail' pet.id %}"> {{pet.name}} </a>
+            <h1> {{ pet.name }}</h1>
+            <p> {{ pet.price }} </p>
+            <p> {{ pet.category }} </p>
+        </div>
+    </div>
+    {% endfor %}
+</div> {% endcomment %}
+
+{% endblock content %}

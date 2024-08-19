@@ -1,0 +1,114 @@
+{% extends "shop/baseCategory.html" %}
+
+{% block content %}
+<div class="flex-container">
+
+    <aside class="aside">
+        <div class="box-category">
+    
+            <div class="category">
+                <a href="{% url 'catalog' %}" class="categories-a"> Categories </a>
+                <form action="{% url 'cat_category'%}" method="GET">
+                    <ul>
+                        <li>
+                            <div class="filter cat-filter">
+                                <h4>Cat Filters</h4>
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by gender</h1>
+                                    {% for gender in genders %}
+                                    <label>
+                                        <input type="checkbox" name="cat-gender" value="{{ gender.name }}" {% if gender.name in selected_genders %}checked{% endif %}>
+                                        {{ gender.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+    
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by coat</h1>
+                                    {% for coat in cat_coats %}
+                                    <label>
+                                        <input type="checkbox" name="cat-coat" value="{{ coat.name }}" {% if coat.name in selected_coats %}checked{% endif %}>
+                                        {{ coat.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+    
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by breed</h1>
+                                    {% for breed in cat_breeds %}
+                                    <label>
+                                        <input type="checkbox" name="cat-breed" value="{{ breed.name }}" {% if breed.name in selected_breeds %}checked{% endif %}>
+                                        {{ breed.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <button type="submit" class="custom-button">Apply Filters</button>
+                </form>
+                <h1 class="h1-filter-price">Price Range:</label>
+                <div class="filter-group">
+                    <h1 class="h1-filter-group">From</h1>
+                    <input type="number" id="price-number" name="price-number" min="0" max="5000" step="50">
+                    <h1 class="h1-filter-group">To</h1>
+                    <input type="number" id="price-number" name="price-number" min="0" max="5000" step="50">
+                </div>
+            </div>
+        </div>
+    
+    </aside>
+    
+    {% comment %} <div class="container">
+        <div class="row">
+            {% for cat in cats %}
+            <div class="col-md-4 mb-4"> <!-- Adjust column width based on your layout -->
+                <div class="card">
+                    <img src="{{ cat.images.url }}" class="card-img-top" alt="{{ cat.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cat.name }}</h5>
+                        <p class="card-text">Price: {{ cat.price }}</p>
+                        <p class="card-text">Category: {{ cat.category }}</p>
+                        <a href="{% url 'product_detail' cat.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div> {% endcomment %}
+
+<div class="custom-container">
+    <div class="custom-row">
+        {% for cat in cats %}
+        <div class="custom-col">
+            <div class="custom-product-card">
+                <img src="{{ cat.images.url }}" class="custom-product-image" alt="{{ cat.name }}">
+                <div class="custom-product-body">
+                    <h5 class="custom-product-title">{{ cat.name }}</h5>
+                    <p class="custom-product-price">Price: ${{ cat.price }}</p>
+                    <p class="custom-product-category">Category: {{ cat.category }}</p>
+                    <a href="{% url 'product_detail' cat.id %}" class="custom-button">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% comment %} <div class="products">
+    {% for cat in cats %}
+    <div class="show-prod">
+        <div class="prod-info">
+            <img src="{{ cat.images.url }}" alt="{{ cat.name }}" class="prod-img">
+            <a href="{% url 'product_detail' cat.id %}"> {{cat.name}} </a>
+            <h1> {{ cat.name }}</h1>
+            <p> {{ cat.price }} </p>
+            <p> {{ cat.category }} </p>
+        </div>
+    </div>
+    {% endfor %}
+</div> {% endcomment %}
+
+{% endblock content %}

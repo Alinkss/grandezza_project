@@ -1,0 +1,114 @@
+{% extends "shop/baseCategory.html" %}
+
+{% block content %}
+
+<div class="flex-container">
+    <aside class="aside">
+        <div class="box-category">
+    
+            <div class="category">
+                <a href="{% url 'catalog' %}" class="categories-a"> Categories </a>
+                <form action="{% url 'rabbit_category'%}" method="GET">
+                    <ul>
+                        <li>
+                            <div class="filter rabbit-filter">
+                                <h4>Rabbits Filters</h4>
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by gender</h1>
+                                    {% for gender in genders %}
+                                    <label>
+                                        <input type="checkbox" name="rabbit-gender" value="{{ gender.name }}">
+                                        {{ gender.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by fur</h1>
+                                    {% for fur in rabbit_furs %}
+                                    <label>
+                                        <input type="checkbox" name="rabbit-fur" value="{{ fur.fur_type }}">
+                                        {{ fur.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by color</h1>
+                                    {% for color in rabbit_colors %}
+                                    <label>
+                                        <input type="checkbox" name="rabbit-color" value="{{ color.color_type }}">
+                                        {{ color.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                                
+                            </div>
+                        </li>
+                    </ul>
+                    <button type="submit" class="custom-button">Apply Filters</button>
+                </form>
+                <h1 class="h1-filter-price">Price Range:</label>
+                <div class="filter-group">
+                    <h1 class="h1-filter-group">From</h1>
+                    <input type="number" id="price-number" name="price-number" min="0" max="5000" step="50">
+                    <h1 class="h1-filter-group">To</h1>
+                    <input type="number" id="price-number" name="price-number" min="0" max="5000" step="50">
+                </div>
+            </div>
+        </div>
+    
+    </aside>
+    
+    {% comment %} <div class="container">
+        <div class="row">
+            {% for rabbit in rabbits %}
+            <div class="col-md-4 mb-4"> <!-- Adjust column width based on your layout -->
+                <div class="card">
+                    <img src="{{ rabbit.images.url }}" class="card-img-top" alt="{{ rabbit.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ rabbit.name }}</h5>
+                        <p class="card-text">Price: {{ rabbit.price }}</p>
+                        <p class="card-text">Category: {{ rabbit.category }}</p>
+                        <a href="{% url 'product_detail' rabbit.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div> {% endcomment %}
+
+
+<div class="custom-container">
+    <div class="custom-row">
+        {% for rabbit in rabbits %}
+        <div class="custom-col">
+            <div class="custom-product-card">
+                <img src="{{ rabbit.images.url }}" class="custom-product-image" alt="{{ rabbit.name }}">
+                <div class="custom-product-body">
+                    <h5 class="custom-product-title">{{ rabbit.name }}</h5>
+                    <p class="custom-product-price">Price: ${{ rabbit.price }}</p>
+                    <p class="custom-product-category">Category: {{ rabbit.category }}</p>
+                    <a href="{% url 'product_detail' rabbit.id %}" class="custom-button">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% comment %} <div class="products">
+    {% for rabbit in rabbits %}
+    <div class="show-prod">
+        <div class="prod-info">
+            <img src="{{ rabbit.images.url }}" alt="{{ rabbit.name }}" class="prod-img">
+            <a href="{% url 'product_detail' rabbit.id %}"> {{tabbit.name}} </a>
+            <h1> {{ rabbit.name }}</h1>
+            <p> {{ rabbit.price }} </p>
+            <p> {{ rabbit.category }} </p>
+        </div>
+    </div>
+    {% endfor %}
+</div> {% endcomment %}
+
+{% endblock content %}
