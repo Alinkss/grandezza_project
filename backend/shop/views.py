@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 
-from .models import Catalog, Pets, Breed, Coat, Size, Color, Fur, Gender, ContactUs
-from shop.forms import ContactUsForm
+from .models import Catalog, Pets, Breed, Coat, Size, Color, Fur, Gender, ContactUs, PetProd, ProductReview
+from shop.forms import ContactUsForm, RatingForm
 
 
 from django.db.models import Q
@@ -18,45 +19,26 @@ def main(request):
         form = ContactUsForm()
     
     context = {
-        'form': form,
+        'form': form.as_p(),
     }
     
-    return render(request, 'shop/main.html', context)
+    return JsonResponse(context)
 
 def catalog(request):
     pets = Pets.objects.all()
     categories = Catalog.objects.all()
+    products = PetProd.objects.all()
     
     context = {
-        'pets': pets,
-        'categories': categories,
+        'pets': list(pets.values()),
+        'categories': list(categories.values()),
+        'products': list(products.values()),
     }
     
-    return render(request, 'shop/catalog.html', context)
-
-# def catalog_category(request, categ_id):
-#     category = get_object_or_404(Catalog, pk=categ_id)
-    
-#     if category.name == 'Cats': 
-#         pets = Cat.objects.all()
-#     elif category.name == 'Dogs':
-#         pets = Dog.objects.all()
-#     elif category.name == 'Rabbits':
-#         pets = Rabbit.objects.all()
-#     else:
-#         pets = []
-        
-#     context = {
-#         'category': category,
-#         'pets': pets,
-#     }
-    
-#     return render(request, 'shop/catalog_category.html', context)
-
+    return JsonResponse(context)
 
 def cat_category(request): 
     categories = Catalog.objects.all()
-    # categories = get_object_or_404(Catalog)
     pets = Pets.objects.filter(type = 'cat')
     genders = Gender.objects.all()
     
@@ -75,8 +57,6 @@ def cat_category(request):
         filter_criteria &= Q(coat__name__in = cat_coat)
     if cat_breed:
         filter_criteria &= Q(breed__name__in = cat_breed)
-    # else:
-    #     filter_criteria &= Cat.objects.all()
     
     if filter_criteria:
         pets = pets.filter(filter_criteria)
@@ -173,15 +153,60 @@ def rabbit_category(request):
     }
     
     return render(request, 'shop/rabbit_category.html', context)
+
+def product(request):
+    products = PetProd.objects.all()
+    product_type = 'petprod'
+    
+    context = {
+        'prods': products,
+        'product_type': product_type,
+    }
+    
+    return render(request, 'shop/prods.html', context)
+
+
+def for_pets(request, prod_id):
+    product = get_object_or_404(PetProd, id=prod_id)
+    user_rating = None
+    product_type = 'petprod'
+    
+    if request.method == 'POST':
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            ProductReview.objects.update_or_create(
+                user=request.user,
+                product=product,
+                defaults={'rating': form.cleaned_data['rating']}
+            )
+            # return redirect('product_detail', id=prod_id)
+    else:
+        form = RatingForm()
+        
+    reviews = ProductReview.objects.filter(product=product)
+    
+    context = {
+        'form': form,
+        'product': product,
+        'user_rating': user_rating,
+        'avarage_rating': product.avarage_rating(),
+        'product_type': product_type,
+        'reviews':reviews,
+    }
+    
+    return render(request, 'shop/product/for_pet.html', context)
+
         
 def product_detail(request, id):
     pets =  Pets.objects.filter(id=id, avaible=True).first()
+    product_type = 'pets'
     
     if not pets:
         print('nothing')
 
     context = {
         'product': pets,
+        'product_type': product_type,
     }       
     
     return render(request, 'shop/product/detail.html', context)

@@ -35,16 +35,16 @@ def blog_main(request):
 
     liked_post_ids = []
     if user.is_authenticated:
-        liked_post_ids = user.likes.values_list('id', flat=True)
+        liked_post_ids = list(user.likes.values_list('id', flat=True))
 
     context = {
-        'page_obj': page_obj,
-        'tags': tags,
-        'categories': categories,
+        'page_obj': list(page_obj.object_list.values()),
+        'tags': list(tags.values()),
+        'categories': list(categories.values()),
         'liked_post_ids': liked_post_ids,
     }
     
-    return render(request, 'blog/blog.html', context)
+    return JsonResponse(context)
 
 def search(request):
     query = request.GET.get('query-search', '')
@@ -52,10 +52,10 @@ def search(request):
     post = Post.objects.filter(Q(title__icontains=query) | Q(user__username__icontains = query))
     
     context = {
-        'post': post,
+        'post': list(post.values()),
     }
     
-    return render(request, 'blog/blog.html', context)
+    return JsonResponse(context)
 
 def blog_categories(request, categ_id=None):
     category_obj = get_object_or_404(Category, pk=categ_id)
@@ -68,16 +68,14 @@ def blog_categories(request, categ_id=None):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    # categories = Category.objects.annotate(num_posts=Count('post'))
-    # print("Categories with post counts:", categories)
     context = {
-        'posts':posts,
+        'posts': list(posts.values()),
         'number_of_posts': number_of_posts,
-        'page_obj': page_obj,
+        'page_obj': list(page_obj.object_list.values()),
         # 'categories': categories,
     }
     
-    return render(request, 'blog/blog.html', context)
+    return JsonResponse(context)
 
 def post(request, post_id=None):
     post = get_object_or_404(Post, id=post_id)
@@ -103,13 +101,19 @@ def post(request, post_id=None):
     comments_form = CommentsForm()
     
     context = {
-        'post': post,
-        'comments': comments,
-        'comments_form': comments_form,
+        'post': {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date,
+            'likes_count': post.likes.count()
+        },
+        'comments': list(comments.values()),
+        'comments_form': comments_form.as_p(),
         'user_has_liked': user_has_liked,
     }
     
-    return render(request, 'blog/post.html', context)
+    return JsonResponse(context)
 
 @login_required
 def likes(request, post_id):
@@ -117,17 +121,6 @@ def likes(request, post_id):
     user = request.user
     user_has_liked = post.likes.filter(id=user.id).exists()
     print(f"Debug: user_has_liked={user_has_liked}")
-    
-    # if request.user.is_authenticated:
-    #     user = request.user
-    #     if post.likes.filter(id=user.id).exists():
-    #         user_has_liked = True
-    #     else:
-    #         user_has_liked = False
-    # else:
-    #     user_has_liked = False
-        
-    # print(f"Debug: user_has_liked after check={user_has_liked}")
     
     if request.method == 'POST':
         if user_has_liked:
@@ -139,13 +132,25 @@ def likes(request, post_id):
             user_has_liked = True
             print(f"Debug: User liked post. user_has_liked={user_has_liked}")
             
+    post_user = {
+        'id': post.user.id,
+        'username': post.user.username,
+        'email': post.user.email
+    }        
             
     context = {
-        'post': post,
+        'post': {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date,
+            'likes_count': post.likes.count(),
+            'user': post_user
+        },
         'user_has_liked': user_has_liked,
     }
     
-    return render(request, 'blog/post.html', context)
+    return JsonResponse(context)
 
 def comment_button(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -164,14 +169,34 @@ def comment_delete(request, post_id, comment_id):
             if request.user == comments.user:
                 comments.delete()
                 return redirect('post', post_id=post.id)
-                
-                
-    context = {
-        'comments': comments,
-        'post': post,
+    post_user = {
+        'id': post.user.id,
+        'username': post.user.username,
+        'email': post.user.email
     }
     
-    return render(request, 'blog/post.html', context)
+    comment_user = {
+        'id': comments.user.id,
+        'username': comments.user.username
+    }                  
+                
+    context = {
+        'comments': {
+            'text': comments.text,
+            'published_date': comments.published_date,
+            'user': comment_user
+        },
+         'post': {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date,
+            'likes_count': post.likes.count(),
+            'user': post_user
+        },
+    }
+    
+    return JsonResponse(context)
         
 
 @login_required
@@ -196,11 +221,11 @@ def create(request):
     image_form = ImageFormSet(queryset=PostImage.objects.none())
     
     context = {
-        'form': form,
-        'image_form':image_form,
+        'form': form.as_p(),
+        'image_form':image_form.as_p(),
     }
     
-    return render(request, 'blog/create.html', context)
+    return JsonResponse(context)
     
 @login_required
 def profile(request, user_id):
@@ -228,26 +253,44 @@ def profile(request, user_id):
         else:
             post.liked.add(user)
             
-    liked_posts_id = []
-    if user.is_authenticated:
-        liked_posts_id = user.likes.values_list('id', flat=True)
+    liked_posts_id = list(user.likes.values_list('id', flat=True))
+
+    
+    user_serial = {
+        'id': user.id,
+        'username': user.username
+    }
+    countries_serial = list(profile.country.values('id', 'name')) if profile.country.exists() else []
+    cities_serial = list(profile.city.values('id', 'name')) if profile.city.exists() else []
+    
+    adresses_serial = list(adresses.values('id', 'street', 'private_house_number', 'entrance_number', 'flat_num'))
+    liked_posts_serial = list(liked_posts.values('id', 'title', 'content', 'published_date'))
+    posts_serial = list(posts.values('id', 'title', 'content', 'published_date'))
+    comments_serial = list(comments.values('id', 'text', 'published_date'))
+    
+    liked_posts_id = list(user.likes.values_list('id', flat=True))
     
     context = {
-        'user': user,
-        'profile': profile,
-        'posts': posts,
-        'comments': comments,
+        'user': user_serial,
+        'profile': {
+            'id': profile.id,
+            'telephone': profile.telephone,
+            'avatar': profile.avatar.url if profile.avatar else None,
+            'country': countries_serial,
+            'city': cities_serial,
+            'background_pic': profile.background_pic.url if profile.background_pic else None
+        },
+        'posts': posts_serial,
+        'comments': comments_serial,
         'posts_number': posts_number,
         'comments_number': comments_number,
         'days_since_register': days_since_registration,
-        'avatar': avatar,
-        'adresses': adresses,
-        'background_pic': background_pic,
-        'liked_posts': liked_posts,
+        'adresses': adresses_serial,
+        'liked_posts': liked_posts_serial,
         'liked_posts_id': liked_posts_id,
     }
     
-    return render(request, 'registration/profile.html', context)
+    return JsonResponse(context)
 
 def registration(request):
     if request.method == 'POST':

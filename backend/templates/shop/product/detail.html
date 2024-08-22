@@ -45,6 +45,7 @@
                 <div class="grey-interlayer"></div>
                 <div class="desc-card">
                     <p class="desc"> {{ product.description }} </p>
+                    <p>Product Type: {{ product_type }}</p>
                     <div class="info-items">
                         <div class="info-box">
                             <p class="info-text">{{ product.category }}</p>
@@ -87,12 +88,21 @@
                 </div>
                 <div class="price-card">
                     <p class="product-price">Price: ${{ product.price }}</p>
-                    <form action="{% url 'cart_add' product.id %}" method="POST">
+                    {% if product_type == 'pets' %}
+                    <form action="{% url 'cart_add' product.id 'pets' %}" method="POST">
                         {% csrf_token %}
                         {{ cart_product_form.as_p }}
                         <input type="hidden" name="quantity" value="1">
                         <input type="submit" value="Add to Cart" class="add-to-cart-button">
                     </form>
+                    {% elif product_type == 'petprod' %}
+                    <form action="{% url 'cart_add' product.id 'petprod' %}" method="POST">
+                        {% csrf_token %}
+                        {{ cart_product_form.as_p }}
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="submit" value="Add to Cart" class="add-to-cart-button">
+                    </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
