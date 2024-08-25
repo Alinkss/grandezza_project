@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+
+.link-list-button {
+	@apply bg-white rounded-sm p-1;
+}
+
+.link-list-button-icon {
+	@apply w-[30px] h-[30px] m-auto;
+}
