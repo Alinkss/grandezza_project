@@ -3,6 +3,7 @@ import '/styles/globals.css';
 import '/styles/header.css';
 import '/styles/linklist.css';
 import '/styles/animations.css';
+import '/styles/contactForm.css';
 
 export const metadata: Metadata = {
 	title: 'Grandezza',

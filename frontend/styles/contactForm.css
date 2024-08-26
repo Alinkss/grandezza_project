@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+
+.input-wrapper {
+	@apply flex flex-col gap-1;
+}
+
+.contact-input {
+	@apply min-w-[300px] border-blue-400 border-2 rounded-xl text-lg text-black p-1 px-2;
+}
+
+.contact-input-error {
+	@apply text-[#ff1100] text-sm;
+}
