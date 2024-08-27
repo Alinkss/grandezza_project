@@ -1,22 +1,9 @@
 'use client';
 import { Formik, FormikHelpers, FormikValues } from 'formik';
-import * as Yup from 'yup';
+import { contactFormSchema } from '@/assets/validationSchemas';
 import axios from 'axios';
 
 const initialValues = { firstName: '', email: '', typeOfHelp: '' };
-
-const validationSchema = Yup.object({
-	firstName: Yup.string()
-		.required('First name is required')
-		.max(40, 'First name must be 40 characters or less'),
-	email: Yup.string()
-		.required('Email is required')
-		.email('Invalid email address'),
-	typeOfHelp: Yup.string().max(
-		400,
-		'Message cannot be longer than 400 characters'
-	),
-});
 
 const onSubmit = (
 	values: FormikValues,
@@ -40,7 +27,7 @@ export default function Contact() {
 			</div>
 			<Formik
 				initialValues={initialValues}
-				validationSchema={validationSchema}
+				validationSchema={contactFormSchema}
 				onSubmit={onSubmit}>
 				{({
 					values,

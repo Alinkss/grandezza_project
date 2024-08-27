@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+
+.footer-cell-wrapper {
+	@apply w-[33%] flex flex-row items-center gap-4 m-auto;
+}
+
+.footer-icon-wrapper {
+	@apply bg-[#373e44] p-2 w-[75px] h-[75px] min-w-[75px] min-h-[75px] flex justify-center items-center;
+}
+
+.footer-cell-title {
+	@apply font-semibold;
+}
+
+.footer-cell-description {
+	@apply text-base text-[#818181] transition hover:text-orange-500;
+}

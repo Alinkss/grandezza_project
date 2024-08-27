@@ -3,7 +3,7 @@ import MomPhoto from './MomPhoto';
 
 export default function AboutUs() {
 	return (
-		<div className="w-full p-16 px-20 bg-[#f7d5bf] flex flex-col gap-16">
+		<div className="w-full p-16 px-20 bg-[#f7d5bf] flex flex-col gap-16" id='about-us-section'>
 			<SectionTitle />
 			<div className="m-auto flex flex-row gap-8">
 				<MomPhoto />
