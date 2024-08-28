@@ -25,3 +25,24 @@ export const loginSchema = Yup.object({
 			'Password does not contain special characters'
 		),
 });
+
+export const signUpSchema = Yup.object({
+	firstName: Yup.string()
+		.required('First Name is required')
+		.min(3, 'First Name must be at least 3 characters long')
+		.matches(/^[a-zA-Z]+$/gim, 'First name cannot contain special characters'),
+	lastName: Yup.string()
+		.required('Last Name is required')
+		.min(3, 'Last Name must be at least 3 characters long')
+		.matches(/^[a-zA-Z]+$/gim, 'Last name cannot contain special characters'),
+	email: Yup.string()
+		.required('Email is required')
+		.email('Invalid email address'),
+	password: Yup.string()
+		.required('Password is required')
+		.min(8, 'Password must be at least 8 characters long')
+		.matches(
+			/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/gim,
+			'Password does not contain special characters'
+		),
+});
