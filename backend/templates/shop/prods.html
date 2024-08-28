@@ -1,0 +1,92 @@
+{% extends "shop/baseCategory.html" %}
+
+{% block content %}
+
+<div class="flex-container">
+    <aside class="aside">
+        <div class="box-category">
+    
+            <div class="category">
+                <a href="{% url 'catalog' %}" class="categories-a"> Categories </a>
+                <form action="{% url 'dog_category'%}" method="GET">
+                    <ul>
+                        <li>
+                            <div class="filter dog-filter">
+                                <h4>Dogs Filters</h4>
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by gender</h1>
+                                    {% for gender in genders %}
+                                    <label>
+                                        <input type="checkbox" name="dog-gender" value="{{ gender.name }}" {% if gender.name in selected_gender %}checked{% endif %}>
+                                        {{ gender.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by size</h1>
+                                    {% for size in dog_sizes %}
+                                    <label>
+                                        <input type="checkbox" name="dog-size" value="{{ size.name }}" {% if size.name in selected_size %}checked{% endif %}>
+                                        {{ size.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by breed</h1>
+                                    {% for breed in dog_breeds %}
+                                    <label>
+                                        <input type="checkbox" name="dog-breed" value="{{ breed.name }}" {% if breed.name in selected_breed %}checked{% endif %}>
+                                        {{ breed.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            
+                                <div class="check-boxes">
+                                    <h1 class="h1-filter"> Filter by coat</h1>
+                                    {% for coat in dog_coats %}
+                                    <label>
+                                        <input type="checkbox" name="dog-coat" value="{{coat.name}}" {% if coat.name in selected_coat %}checked{% endif %}>
+                                        {{ coat.name }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                        
+                            </div>
+                        </li>
+                    </ul>
+                    <button type="submit" class="custom-button">Apply Filters</button>
+                </form>
+                <h1 class="h1-filter-price">Price Range:</label>
+                <div class="filter-group">
+                    <h1 class="h1-filter-group">From</h1>
+                    <input type="number" id="price-number" name="price-number" min="0" max="5000" step="50">
+                    <h1 class="h1-filter-group">To</h1>
+                    <input type="number" id="price-number" name="price-number" min="0" max="5000" step="50">
+                </div>
+            </div>
+        </div>
+    
+    </aside>
+
+<div class="custom-container">
+    <div class="custom-row">
+        {% for prod in prods %}
+        <div class="custom-col">
+            <div class="custom-product-card">
+                <img src="{{ prod.image.url }}" class="custom-product-image" alt="{{ prod.name }}">
+                <div class="custom-product-body">
+                    <h5 class="custom-product-title">{{ prod.name }}</h5>
+                    <p class="custom-product-price">Price: ${{ prod.price }}</p>
+                    <p class="custom-product-category">Category: {{ prod.category }}</p>
+                    <a href="{% url 'for_pets' prod.id %}" class="custom-button">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}
