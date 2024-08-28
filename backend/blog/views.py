@@ -35,16 +35,16 @@ def blog_main(request):
 
     liked_post_ids = []
     if user.is_authenticated:
-        liked_post_ids = user.likes.values_list('id', flat=True)
+        liked_post_ids = list(user.likes.values_list('id', flat=True))
 
     context = {
-        'page_obj': page_obj,
-        'tags': tags,
-        'categories': categories,
+        'page_obj': list(page_obj.object_list.values()),
+        'tags': list(tags.values()),
+        'categories': list(categories.values()),
         'liked_post_ids': liked_post_ids,
     }
     
-    return render(request, 'blog/blog.html', context)
+    return JsonResponse(context)
 
 def search(request):
     query = request.GET.get('query-search', '')
@@ -52,10 +52,10 @@ def search(request):
     post = Post.objects.filter(Q(title__icontains=query) | Q(user__username__icontains = query))
     
     context = {
-        'post': post,
+        'post': list(post.values()),
     }
     
-    return render(request, 'blog/blog.html', context)
+    return JsonResponse(context)
 
 def blog_categories(request, categ_id=None):
     category_obj = get_object_or_404(Category, pk=categ_id)
@@ -68,16 +68,15 @@ def blog_categories(request, categ_id=None):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    # categories = Category.objects.annotate(num_posts=Count('post'))
-    # print("Categories with post counts:", categories)
     context = {
-        'posts':posts,
+        'posts': list(posts.values()),
         'number_of_posts': number_of_posts,
-        'page_obj': page_obj,
-        # 'categories': categories,
+        'page_obj': list(page_obj.object_list.values()),
     }
     
-    return render(request, 'blog/blog.html', context)
+    return JsonResponse(context)
+
+
 
 def post(request, post_id=None):
     post = get_object_or_404(Post, id=post_id)
@@ -93,23 +92,45 @@ def post(request, post_id=None):
             comment.post = post
             comment.published_date = now()
             comment.save()
-            return redirect('post', post_id=post.id)
+            
+            user_data = {
+                'username': user.username
+            }
+
+            
+            comments_cd = {
+                'id': comment.id,
+                'text': comment.text,
+                'published_date': comment.published_date.isoformat(),
+                'user': user_data
+            }
+            
+            form_data = {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': comments_cd
+            }
+            
+            return JsonResponse(form_data)
         if user_has_liked:
             post.likes.remove(user)
             user_has_liked = False
         else:
             post.likes.add(user)
-        
-    comments_form = CommentsForm()
     
     context = {
-        'post': post,
-        'comments': comments,
-        'comments_form': comments_form,
+        'post': {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date,
+            'likes_count': post.likes.count()
+        },
+        'comments': list(comments.values()),
         'user_has_liked': user_has_liked,
     }
     
-    return render(request, 'blog/post.html', context)
+    return JsonResponse(context)
 
 @login_required
 def likes(request, post_id):
@@ -117,17 +138,6 @@ def likes(request, post_id):
     user = request.user
     user_has_liked = post.likes.filter(id=user.id).exists()
     print(f"Debug: user_has_liked={user_has_liked}")
-    
-    # if request.user.is_authenticated:
-    #     user = request.user
-    #     if post.likes.filter(id=user.id).exists():
-    #         user_has_liked = True
-    #     else:
-    #         user_has_liked = False
-    # else:
-    #     user_has_liked = False
-        
-    # print(f"Debug: user_has_liked after check={user_has_liked}")
     
     if request.method == 'POST':
         if user_has_liked:
@@ -139,40 +149,114 @@ def likes(request, post_id):
             user_has_liked = True
             print(f"Debug: User liked post. user_has_liked={user_has_liked}")
             
+    post_user = {
+        'id': post.user.id,
+        'username': post.user.username,
+        'email': post.user.email
+    }        
             
     context = {
-        'post': post,
+        'post': {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date,
+            'likes_count': post.likes.count(),
+            'user': post_user
+        },
         'user_has_liked': user_has_liked,
     }
     
-    return render(request, 'blog/post.html', context)
+    return JsonResponse(context)
 
 def comment_button(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     
     if request.method == 'POST':
-        return redirect('post', post_id=post.id)
+        user_data = {
+            'id': request.user.id,
+            'username': request.user.username
+        }
+            
+        category_data = {
+            'id': post.category.id,
+            'name': post.category.name
+        } if post.category else None
+            
+        image_urls = []
+            
+        post_cd = {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date.isoformat(),
+            'user': user_data,
+            'category': category_data
+        }
         
-    return redirect('post', post_id=post.id)
+        form_data = {
+            'post_form': {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': post_cd
+            },
+            'image_form': {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': image_urls
+            }
+        }
+        
+        user_data = {
+            'id': request.user.id,
+            'username': request.user.username
+        }
+            
+        category_data = {
+            'id': post.category.id,
+            'name': post.category.name
+        } if post.category else None
+            
+        image_urls = []
+            
+        post_cd = {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date.isoformat(),
+            'user': user_data,
+            'category': category_data
+        }
+        
+        form_data = {
+            'post_form': {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': post_cd
+            },
+            'image_form': {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': image_urls
+            }
+        }
+        
+    return JsonResponse(form_data)
 
 def comment_delete(request, post_id, comment_id):
     post = get_object_or_404(Post, id=post_id)
     comments = get_object_or_404(Comments, id=comment_id)
     
     if request.method == "POST":
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user == comments.user:
             if request.user == comments.user:
                 comments.delete()
-                return redirect('post', post_id=post.id)
-                
-                
-    context = {
-        'comments': comments,
-        'post': post,
-    }
-    
-    return render(request, 'blog/post.html', context)
-        
+                return JsonResponse({'success': True, 'message': 'Comment deleted successfully'})
+            
+        return JsonResponse({
+            'success': False,
+            'message': 'Comment not deleted successfully'
+        })
 
 @login_required
 def create(request):
@@ -185,23 +269,60 @@ def create(request):
             post.user = request.user
             post.save()
             
+            user_data = {
+                'id': request.user.id,
+                'username': request.user.username
+            }
+            
+            category_data = {
+                'id': post.category.id,
+                'name': post.category.name
+            } if post.category else None
+            
+            image_urls = []
+            
+            post_cd = {
+                'id': post.id,
+                'title': post.title,
+                'content': post.content,
+                'published_date': post.published_date.isoformat(),
+                'user': user_data,
+                'category': category_data
+            }
+            
+            form_data = {
+                'post_form': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': post_cd
+                },
+                'image_form': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': image_urls
+                }
+            }
+    
             for form in image_form.cleaned_data:
                 if form:
                     image = form['image']
-                    PostImage.objects.create(post=post, image=image)
+                    post_image = PostImage.objects.create(post=post, image=image)
+                    image_urls.append(post_image.image.url)
                     
-            return redirect('blog_main')
+            return JsonResponse(form_data)
+        else:
+            form_errors = form.errors.as_json() if not form.is_valid() else None
+            image_form_errors = image_form.errors.as_json() if not image_form.is_valid() else None
+
+            errors = {
+                'post_form_errors': form_errors,
+                'image_form_errors': image_form_errors
+            }
+
+            return JsonResponse(errors, status=400)
         
-    form = PostForm()
-    image_form = ImageFormSet(queryset=PostImage.objects.none())
-    
-    context = {
-        'form': form,
-        'image_form':image_form,
-    }
-    
-    return render(request, 'blog/create.html', context)
-    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 @login_required
 def profile(request, user_id):
     user = User.objects.get(id = user_id)
@@ -228,26 +349,44 @@ def profile(request, user_id):
         else:
             post.liked.add(user)
             
-    liked_posts_id = []
-    if user.is_authenticated:
-        liked_posts_id = user.likes.values_list('id', flat=True)
+    liked_posts_id = list(user.likes.values_list('id', flat=True))
+
+    
+    user_serial = {
+        'id': user.id,
+        'username': user.username
+    }
+    countries_serial = list(profile.country.values('id', 'name')) if profile.country.exists() else []
+    cities_serial = list(profile.city.values('id', 'name')) if profile.city.exists() else []
+    
+    adresses_serial = list(adresses.values('id', 'street', 'private_house_number', 'entrance_number', 'flat_num'))
+    liked_posts_serial = list(liked_posts.values('id', 'title', 'content', 'published_date'))
+    posts_serial = list(posts.values('id', 'title', 'content', 'published_date'))
+    comments_serial = list(comments.values('id', 'text', 'published_date'))
+    
+    liked_posts_id = list(user.likes.values_list('id', flat=True))
     
     context = {
-        'user': user,
-        'profile': profile,
-        'posts': posts,
-        'comments': comments,
+        'user': user_serial,
+        'profile': {
+            'id': profile.id,
+            'telephone': profile.telephone,
+            'avatar': profile.avatar.url if profile.avatar else None,
+            'country': countries_serial,
+            'city': cities_serial,
+            'background_pic': profile.background_pic.url if profile.background_pic else None
+        },
+        'posts': posts_serial,
+        'comments': comments_serial,
         'posts_number': posts_number,
         'comments_number': comments_number,
         'days_since_register': days_since_registration,
-        'avatar': avatar,
-        'adresses': adresses,
-        'background_pic': background_pic,
-        'liked_posts': liked_posts,
+        'adresses': adresses_serial,
+        'liked_posts': liked_posts_serial,
         'liked_posts_id': liked_posts_id,
     }
     
-    return render(request, 'registration/profile.html', context)
+    return JsonResponse(context)
 
 def registration(request):
     if request.method == 'POST':
@@ -266,59 +405,165 @@ def registration(request):
             adress.save()
             
             login(request, user)
-            return redirect('profile', user_id=user.id)
+            
+            user_form_data = {
+                'id': user.id,
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'date_joined': user.date_joined.isoformat()
+            }
+            
+            register_form_data = {
+                'user': user.id,
+                'telephone': register.telephone,
+                'avatar': register.avatar.url if register.avatar else '',
+                'country': list(register_form.instance.country.values_list('name', flat=True)),
+                'city': list(register_form.instance.city.values_list('name', flat=True)), 
+                'background_pic': register.background_pic.url if register.background_pic else ''
+            }
+            
+            adress_form_data = {
+                'id': adress.id,
+                'private_house_number': adress.private_house_number if adress.private_house_number else None,
+                'entrance_number': adress.entrance_number if adress.entrance_number else None,
+                'street': adress.street,
+                'flat_num': adress.flat_num if adress.flat_num else None,
+                'profile_id': adress.profile.id
+            }
+            
+            forms_data = {
+                'user_check': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': user_form_data        
+                },
+                'register_check': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': register_form_data
+                },
+                'adress_check': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': adress_form_data
+                }
+            }
+            
+            return JsonResponse(forms_data)
         else:
-            print(user_form.errors)
-            print(register_form.errors)
-            print(adress_form.errors)
-            print(request.FILES)
+            errors = {
+                'user_form_errors': user_form.errors.as_json(),
+                'register_form_errors': register_form.errors.as_json(),
+                'adress_form_errors': adress_form.errors.as_json(),
+            }
+            return JsonResponse(errors, status=400)
         
-    user_form = UserRegister()
-    register_form = RegisterForm()
-    adress_form = AdressForm()
-    
-    context = {
-        'user_form': user_form,
-        'register_form': register_form,
-        'adress_form': adress_form,
-    }
-    
-    return render(request, 'registration/register.html', context)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 class MyLogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('main')
-    
-@login_required
+
+@login_required    
 def update_profile(request):
+    user_update_form = UserUpdateForm(request.POST, instance=request.user)
+    profile_update_form = ProfileUpdate(request.POST, request.FILES, instance=request.user.profile)
+    adress_setform = AdressFormSet(request.POST, request.FILES,  instance=request.user.profile)
+    avatar_form = AvatarForm(request.POST, request.FILES, instance=request.user.profile)
+    
     if request.method == 'POST':
-        user_update_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_update_form = ProfileUpdate(request.POST, request.FILES, instance=request.user.profile)
-        adress_setform = AdressFormSet(request.POST, instance=request.user.profile)
-        avatar_form = AvatarForm(request.POST, request.FILES, instance=request.user.profile)
         
-        if user_update_form.is_valid() and profile_update_form.is_valid() and adress_setform.is_valid() and avatar_form.is_valid():
+        if (user_update_form.is_valid() and 
+            profile_update_form.is_valid() and 
+            adress_setform.is_valid() and 
+            avatar_form.is_valid()):
+            
+            user_update = user_update_form.cleaned_data
+            
+            forms_data = {
+                'user_update': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': user_update
+                },
+                'profile_update': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': {
+                        'telephone': profile_update_form.cleaned_data.get('telephone'),
+                        'country': list(profile_update_form.instance.country.values_list('name', flat=True)),
+                        'city': list(profile_update_form.instance.city.values_list('name', flat=True)), 
+                    }
+                },
+                'adress_update': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': [
+                        {
+                            'street': form.cleaned_data['street'],
+                            'private_house_number': form.cleaned_data['private_house_number'],
+                            'entrance_number': form.cleaned_data['entrance_number'],
+                            'flat_num': form.cleaned_data['flat_num']
+                        }
+                        for form in adress_setform
+                    ]
+                },
+                'avatar_update': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data':{
+                        'avatar': request.user.profile.avatar.url if request.user.profile.avatar else None
+                        }
+                },
+            }
+
+            
             user_update_form.save()
             profile_update_form.save()
             adress_setform.save()
             avatar_form.save()
             
-            return redirect('profile', user_id=request.user.pk)
+            return JsonResponse(forms_data)
         
+    forms_data = {
+                'user_update': {
+                    'is_valid': user_update_form.is_valid(),
+                    'errors': user_update_form.errors.as_json(),
+                    'cleaned_data': None
+                },
+                'profile_update': {
+                    'is_valid': profile_update_form.is_valid(),
+                    'errors': profile_update_form.errors.as_json(),
+                    'cleaned_data': None
+                },
+                'adress_update': {
+                    'is_valid': adress_setform.is_valid(),
+                    'errors': {form.prefix: form.errors.as_json() for form in adress_setform},
+                    'cleaned_data': None
+                },
+                'avatar_update': {
+                    'is_valid': avatar_form.is_valid(),
+                    'errors': avatar_form.errors.as_json(),
+                    'cleaned_data': None
+                },
+            }
+    print(user_update_form.errors)
+    print(profile_update_form.errors)
+    print(adress_setform.errors)
+    print(avatar_form.errors)
+    print(request.user.profile.telephone)
+    print('User profile:', request.user.profile)
+    print('POST data:', request.POST)
+    print('FILES data:', request.FILES)
+        
+    return JsonResponse(forms_data)
+
+@login_required
+def my_view(request):
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'logged_in'})
     else:
-        user_update_form = UserUpdateForm(instance=request.user)
-        profile_update_form = ProfileUpdate(instance=request.user.profile)
-        adress_setform = AdressFormSet(instance=request.user.profile)
-        avatar_form = AvatarForm(instance=request.user.profile)
-        if not adress_setform:
-            adress_setform = AdressFormSet(queryset=Adress.objects.none(), instance=request.user.profile)
-            
-    context = {
-        'user_update_form': user_update_form,
-        'profile_update': profile_update_form,
-        'adress_setform': adress_setform,
-        'avatar_form': avatar_form,
-    }
-        
-    return render(request, 'registration/update_profile.html', context)
+        return JsonResponse({'status': 'not_logged_in'}, status=401)

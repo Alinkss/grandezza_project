@@ -8,7 +8,7 @@ from .models import Post, PostImage, Profile, Adress, Comments, Like
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ('published_date', 'user',)
+        exclude = ('published_date', 'user', 'likes')
         
 class PostImageForm(forms.ModelForm):
     class Meta:
@@ -41,7 +41,7 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdate(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['avatar', 'telephone', 'country', 'city', 'background_pic',]
+        fields = ['telephone', 'country', 'city',]
         
 class AvatarForm(forms.ModelForm):
     class Meta:

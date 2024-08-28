@@ -18,14 +18,22 @@
         {% for item in cart %}
             <div class="product-box">
                 <div class="product-image">
-                    <img src="{{ item.pet.images.url }}" alt="{{ item.pet.name }}">
+                    {% if item.product_type == 'pets' %}
+                    <img src="{{ item.product.images.url }}" alt="{{ item.product.name }}">
+                    {% elif item.product_type == 'petprod' %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                    {% endif %}
                 </div>
                 <div class="product-details">
-                    <h5 class="product-name">{{ item.pet.name }}</h5>
-                    <a href="{% url 'cart_remove' item.id %}" class="btn btn-danger remove-button">Remove</a>
+                    <h5 class="product-name">{{ item.product.name }}</h5>
+                    {% if item.product_type == 'pets' %}
+                    <a href="{% url 'cart_remove' item.product.id 'pets' %}" class="btn btn-danger remove-button">Remove</a>
+                    {% elif item.product_type == 'petprod' %}
+                    <a href="{% url 'cart_remove' item.product.id 'petprod' %}" class="btn btn-danger remove-button">Remove</a>
+                    {% endif %}
                 </div>
                 <div class="product-price">
-                    <p >Price: {{ item.price }}</p>
+                    <p>Price: {{ item.price }}</p>
                 </div>
             </div>
             {% endfor %}

@@ -1,0 +1,64 @@
+{% extends "shop/base_prod.html" %}
+
+{% block content %}
+
+{% if product %}
+
+<div class="product-container">
+    <div class="product-row">
+        <div class="product-column">
+            <div class="image-card">
+                <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}">
+            </div>
+            <div class="info-cards">
+                <div class="name-card">
+                    <h5 class="product-title">{{ product.name }}</h5>
+                </div>
+                <div class="grey-interlayer"></div>
+                <div class="desc-card">
+                    <p class="desc"> {{ product.description }} </p>
+                    <div class="info-items">
+                        <div class="info-box">
+                            <p class="info-text">{{ product.category }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="price-card">
+                    <p class="product-price">Price: ${{ product.price }}</p>
+                    {% if product_type == 'pets' %}
+                    <form action="{% url 'cart_add' product.id 'pets' %}" method="POST">
+                        {% csrf_token %}
+                        {{ cart_product_form.as_p }}
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="submit" value="Add to Cart" class="add-to-cart-button">
+                    </form>
+                    {% else %}
+                    <form action="{% url 'cart_add' product.id 'petprod' %}" method="POST">
+                        {% csrf_token %}
+                        {{ cart_product_form.as_p }}
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="submit" value="Add to Cart" class="add-to-cart-button">
+                    </form>
+                    {% endif %}
+                </div>
+                <div class="desc-card">
+                    <h3> Avaraghe rating: {{ avarage_rating|floatformat:2 }} </h3>
+
+                    {% if user_rating %}
+                    <p> Ypur rating: {{user_rating.rating }} </p>
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'for_pets' product.id %}">
+                        {% csrf_token %}
+                        {{ form.as_p}}
+                        <button type="submit"> Submit </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock content %}

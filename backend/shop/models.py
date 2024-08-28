@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 
@@ -81,8 +81,27 @@ class ContactUs(models.Model):
     def __str__(self):
         return f"{self.first_name}, {self.email}"
     
-# class Cloth(models.Model):
-#     category = models.ForeignKey(Catalog, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=600)
-#     avaible = models.BooleanField(default=True)
-#     quantity = models.
+class PetProd(models.Model):
+    category = models.ForeignKey(Catalog, on_delete=models.CASCADE)
+    name = models.CharField(max_length=600)
+    avaible = models.BooleanField(default=True)
+    stock = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.CharField(max_length=900)
+    image = models.ImageField(upload_to='pet_prod')
+    
+    def avarage_rating(self):
+        total_ratings = self.ratings.aggregate(models.Avg('rating'))
+        return total_ratings['rating__avg'] or 0
+    
+    def __str__(self):
+        return self.name
+    
+class ProductReview(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(PetProd, on_delete=models.CASCADE, related_name='ratings')
+    rating = models.IntegerField(choices=[(i, str(i)) for i in range(1,6)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'product')
