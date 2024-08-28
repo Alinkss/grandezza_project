@@ -72,10 +72,11 @@ def blog_categories(request, categ_id=None):
         'posts': list(posts.values()),
         'number_of_posts': number_of_posts,
         'page_obj': list(page_obj.object_list.values()),
-        # 'categories': categories,
     }
     
     return JsonResponse(context)
+
+
 
 def post(request, post_id=None):
     post = get_object_or_404(Post, id=post_id)
@@ -91,14 +92,31 @@ def post(request, post_id=None):
             comment.post = post
             comment.published_date = now()
             comment.save()
-            return redirect('post', post_id=post.id)
+            
+            user_data = {
+                'username': user.username
+            }
+
+            
+            comments_cd = {
+                'id': comment.id,
+                'text': comment.text,
+                'published_date': comment.published_date.isoformat(),
+                'user': user_data
+            }
+            
+            form_data = {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': comments_cd
+            }
+            
+            return JsonResponse(form_data)
         if user_has_liked:
             post.likes.remove(user)
             user_has_liked = False
         else:
             post.likes.add(user)
-        
-    comments_form = CommentsForm()
     
     context = {
         'post': {
@@ -109,7 +127,6 @@ def post(request, post_id=None):
             'likes_count': post.likes.count()
         },
         'comments': list(comments.values()),
-        'comments_form': comments_form.as_p(),
         'user_has_liked': user_has_liked,
     }
     
@@ -156,48 +173,90 @@ def comment_button(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     
     if request.method == 'POST':
-        return redirect('post', post_id=post.id)
+        user_data = {
+            'id': request.user.id,
+            'username': request.user.username
+        }
+            
+        category_data = {
+            'id': post.category.id,
+            'name': post.category.name
+        } if post.category else None
+            
+        image_urls = []
+            
+        post_cd = {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date.isoformat(),
+            'user': user_data,
+            'category': category_data
+        }
         
-    return redirect('post', post_id=post.id)
+        form_data = {
+            'post_form': {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': post_cd
+            },
+            'image_form': {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': image_urls
+            }
+        }
+        
+        user_data = {
+            'id': request.user.id,
+            'username': request.user.username
+        }
+            
+        category_data = {
+            'id': post.category.id,
+            'name': post.category.name
+        } if post.category else None
+            
+        image_urls = []
+            
+        post_cd = {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'published_date': post.published_date.isoformat(),
+            'user': user_data,
+            'category': category_data
+        }
+        
+        form_data = {
+            'post_form': {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': post_cd
+            },
+            'image_form': {
+                'is_valid': True,
+                'errors': None,
+                'cleaned_data': image_urls
+            }
+        }
+        
+    return JsonResponse(form_data)
 
 def comment_delete(request, post_id, comment_id):
     post = get_object_or_404(Post, id=post_id)
     comments = get_object_or_404(Comments, id=comment_id)
     
     if request.method == "POST":
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user == comments.user:
             if request.user == comments.user:
                 comments.delete()
-                return redirect('post', post_id=post.id)
-    post_user = {
-        'id': post.user.id,
-        'username': post.user.username,
-        'email': post.user.email
-    }
-    
-    comment_user = {
-        'id': comments.user.id,
-        'username': comments.user.username
-    }                  
-                
-    context = {
-        'comments': {
-            'text': comments.text,
-            'published_date': comments.published_date,
-            'user': comment_user
-        },
-         'post': {
-            'id': post.id,
-            'title': post.title,
-            'content': post.content,
-            'published_date': post.published_date,
-            'likes_count': post.likes.count(),
-            'user': post_user
-        },
-    }
-    
-    return JsonResponse(context)
-        
+                return JsonResponse({'success': True, 'message': 'Comment deleted successfully'})
+            
+        return JsonResponse({
+            'success': False,
+            'message': 'Comment not deleted successfully'
+        })
 
 @login_required
 def create(request):
@@ -210,23 +269,60 @@ def create(request):
             post.user = request.user
             post.save()
             
+            user_data = {
+                'id': request.user.id,
+                'username': request.user.username
+            }
+            
+            category_data = {
+                'id': post.category.id,
+                'name': post.category.name
+            } if post.category else None
+            
+            image_urls = []
+            
+            post_cd = {
+                'id': post.id,
+                'title': post.title,
+                'content': post.content,
+                'published_date': post.published_date.isoformat(),
+                'user': user_data,
+                'category': category_data
+            }
+            
+            form_data = {
+                'post_form': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': post_cd
+                },
+                'image_form': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': image_urls
+                }
+            }
+    
             for form in image_form.cleaned_data:
                 if form:
                     image = form['image']
-                    PostImage.objects.create(post=post, image=image)
+                    post_image = PostImage.objects.create(post=post, image=image)
+                    image_urls.append(post_image.image.url)
                     
-            return redirect('blog_main')
+            return JsonResponse(form_data)
+        else:
+            form_errors = form.errors.as_json() if not form.is_valid() else None
+            image_form_errors = image_form.errors.as_json() if not image_form.is_valid() else None
+
+            errors = {
+                'post_form_errors': form_errors,
+                'image_form_errors': image_form_errors
+            }
+
+            return JsonResponse(errors, status=400)
         
-    form = PostForm()
-    image_form = ImageFormSet(queryset=PostImage.objects.none())
-    
-    context = {
-        'form': form.as_p(),
-        'image_form':image_form.as_p(),
-    }
-    
-    return JsonResponse(context)
-    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 @login_required
 def profile(request, user_id):
     user = User.objects.get(id = user_id)
@@ -309,59 +405,165 @@ def registration(request):
             adress.save()
             
             login(request, user)
-            return redirect('profile', user_id=user.id)
+            
+            user_form_data = {
+                'id': user.id,
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'date_joined': user.date_joined.isoformat()
+            }
+            
+            register_form_data = {
+                'user': user.id,
+                'telephone': register.telephone,
+                'avatar': register.avatar.url if register.avatar else '',
+                'country': list(register_form.instance.country.values_list('name', flat=True)),
+                'city': list(register_form.instance.city.values_list('name', flat=True)), 
+                'background_pic': register.background_pic.url if register.background_pic else ''
+            }
+            
+            adress_form_data = {
+                'id': adress.id,
+                'private_house_number': adress.private_house_number if adress.private_house_number else None,
+                'entrance_number': adress.entrance_number if adress.entrance_number else None,
+                'street': adress.street,
+                'flat_num': adress.flat_num if adress.flat_num else None,
+                'profile_id': adress.profile.id
+            }
+            
+            forms_data = {
+                'user_check': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': user_form_data        
+                },
+                'register_check': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': register_form_data
+                },
+                'adress_check': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': adress_form_data
+                }
+            }
+            
+            return JsonResponse(forms_data)
         else:
-            print(user_form.errors)
-            print(register_form.errors)
-            print(adress_form.errors)
-            print(request.FILES)
+            errors = {
+                'user_form_errors': user_form.errors.as_json(),
+                'register_form_errors': register_form.errors.as_json(),
+                'adress_form_errors': adress_form.errors.as_json(),
+            }
+            return JsonResponse(errors, status=400)
         
-    user_form = UserRegister()
-    register_form = RegisterForm()
-    adress_form = AdressForm()
-    
-    context = {
-        'user_form': user_form,
-        'register_form': register_form,
-        'adress_form': adress_form,
-    }
-    
-    return render(request, 'registration/register.html', context)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 class MyLogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('main')
-    
-@login_required
+
+@login_required    
 def update_profile(request):
+    user_update_form = UserUpdateForm(request.POST, instance=request.user)
+    profile_update_form = ProfileUpdate(request.POST, request.FILES, instance=request.user.profile)
+    adress_setform = AdressFormSet(request.POST, request.FILES,  instance=request.user.profile)
+    avatar_form = AvatarForm(request.POST, request.FILES, instance=request.user.profile)
+    
     if request.method == 'POST':
-        user_update_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_update_form = ProfileUpdate(request.POST, request.FILES, instance=request.user.profile)
-        adress_setform = AdressFormSet(request.POST, instance=request.user.profile)
-        avatar_form = AvatarForm(request.POST, request.FILES, instance=request.user.profile)
         
-        if user_update_form.is_valid() and profile_update_form.is_valid() and adress_setform.is_valid() and avatar_form.is_valid():
+        if (user_update_form.is_valid() and 
+            profile_update_form.is_valid() and 
+            adress_setform.is_valid() and 
+            avatar_form.is_valid()):
+            
+            user_update = user_update_form.cleaned_data
+            
+            forms_data = {
+                'user_update': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': user_update
+                },
+                'profile_update': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': {
+                        'telephone': profile_update_form.cleaned_data.get('telephone'),
+                        'country': list(profile_update_form.instance.country.values_list('name', flat=True)),
+                        'city': list(profile_update_form.instance.city.values_list('name', flat=True)), 
+                    }
+                },
+                'adress_update': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data': [
+                        {
+                            'street': form.cleaned_data['street'],
+                            'private_house_number': form.cleaned_data['private_house_number'],
+                            'entrance_number': form.cleaned_data['entrance_number'],
+                            'flat_num': form.cleaned_data['flat_num']
+                        }
+                        for form in adress_setform
+                    ]
+                },
+                'avatar_update': {
+                    'is_valid': True,
+                    'errors': None,
+                    'cleaned_data':{
+                        'avatar': request.user.profile.avatar.url if request.user.profile.avatar else None
+                        }
+                },
+            }
+
+            
             user_update_form.save()
             profile_update_form.save()
             adress_setform.save()
             avatar_form.save()
             
-            return redirect('profile', user_id=request.user.pk)
+            return JsonResponse(forms_data)
         
+    forms_data = {
+                'user_update': {
+                    'is_valid': user_update_form.is_valid(),
+                    'errors': user_update_form.errors.as_json(),
+                    'cleaned_data': None
+                },
+                'profile_update': {
+                    'is_valid': profile_update_form.is_valid(),
+                    'errors': profile_update_form.errors.as_json(),
+                    'cleaned_data': None
+                },
+                'adress_update': {
+                    'is_valid': adress_setform.is_valid(),
+                    'errors': {form.prefix: form.errors.as_json() for form in adress_setform},
+                    'cleaned_data': None
+                },
+                'avatar_update': {
+                    'is_valid': avatar_form.is_valid(),
+                    'errors': avatar_form.errors.as_json(),
+                    'cleaned_data': None
+                },
+            }
+    print(user_update_form.errors)
+    print(profile_update_form.errors)
+    print(adress_setform.errors)
+    print(avatar_form.errors)
+    print(request.user.profile.telephone)
+    print('User profile:', request.user.profile)
+    print('POST data:', request.POST)
+    print('FILES data:', request.FILES)
+        
+    return JsonResponse(forms_data)
+
+@login_required
+def my_view(request):
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'logged_in'})
     else:
-        user_update_form = UserUpdateForm(instance=request.user)
-        profile_update_form = ProfileUpdate(instance=request.user.profile)
-        adress_setform = AdressFormSet(instance=request.user.profile)
-        avatar_form = AvatarForm(instance=request.user.profile)
-        if not adress_setform:
-            adress_setform = AdressFormSet(queryset=Adress.objects.none(), instance=request.user.profile)
-            
-    context = {
-        'user_update_form': user_update_form,
-        'profile_update': profile_update_form,
-        'adress_setform': adress_setform,
-        'avatar_form': avatar_form,
-    }
-        
-    return render(request, 'registration/update_profile.html', context)
+        return JsonResponse({'status': 'not_logged_in'}, status=401)
