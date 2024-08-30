@@ -7,7 +7,6 @@ import '/styles/contactForm.css';
 import '/styles/footer.css';
 import '/styles/authorizingForm.css';
 import Header from '@/components/Header/Header';
-import Footer from '@/components/Footer/Footer';
 
 export const metadata: Metadata = {
 	title: 'Grandezza',
@@ -16,15 +15,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
 	children,
-}: Readonly<{
+}: {
 	children: React.ReactNode;
-}>) {
+}) {
+	//TODO:
+	//? add tabIndex to header social network buttons
+
 	return (
 		<html lang="en">
 			<body className="h-screen flex flex-col">
 				<Header />
 				{children}
-				<Footer />
 			</body>
 		</html>
 	);
