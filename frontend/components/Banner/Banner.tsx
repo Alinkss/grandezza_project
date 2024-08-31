@@ -8,7 +8,7 @@ export default function Banner() {
 				src="https://www.ageucate.com/blog/wp-content/uploads/2019/04/Puppy-and-Kitten-hug.jpg"
 				alt="#"
 				priority={true}
-				className="m-auto w-[1200px] h-[600px]"
+				className="m-auto px-4 w-[1200px] h-[600px]"
 				width={2000}
 				height={1000}
 			/>
@@ -18,12 +18,12 @@ export default function Banner() {
 					<em className="z-10 small-text text-white">Welcome to Grandezza</em>
 					<h1 className="z-10 text-[#ffb32d] text-4xl">Grandezza</h1>
 					<p className="z-10 text-white mb-4 pb-lg-2">
-						your <em>favourite</em> nursery
+						your <u>favourite</u> nursery
 					</p>
 					<div className="z-10 flex flex-row">
 						<Link
 							className="text-white btn custom-btn custom-border-btn smoothscroll me-3"
-							href="#">
+							href="#about-us-section">
 							Our Story
 						</Link>
 						<Link

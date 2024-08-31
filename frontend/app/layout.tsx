@@ -3,6 +3,11 @@ import '/styles/globals.css';
 import '/styles/header.css';
 import '/styles/linklist.css';
 import '/styles/animations.css';
+import '/styles/contactForm.css';
+import '/styles/footer.css';
+import '/styles/authorizingForm.css';
+import '/styles/contact.css';
+import Header from '@/components/Header/Header';
 
 export const metadata: Metadata = {
 	title: 'Grandezza',
@@ -11,12 +16,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
 	children,
-}: Readonly<{
+}: {
 	children: React.ReactNode;
-}>) {
+}) {
 	return (
 		<html lang="en">
-			<body>{children}</body>
+			<body className="h-screen flex flex-col">
+				<Header />
+				{children}
+			</body>
 		</html>
 	);
 }
