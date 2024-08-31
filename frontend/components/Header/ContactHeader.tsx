@@ -29,12 +29,14 @@ export default function ContactHeader() {
 						alt="#"
 					/>
 					<div className="m-auto text-sm">
-						<Link href="tel:380504563877">+38(050)456-38-77</Link>
+						<Link href="tel:380504563877" tabIndex={-1}>
+							+38(050)456-38-77
+						</Link>
 					</div>
 				</div>
 				<div className="flex flex-row gap-1 justify-center items-center">
-					<button className="link-list-button">
-						<Link href="https://www.facebook.com/Cats.comFB/">
+					<button className="link-list-button" tabIndex={-1}>
+						<Link href="https://www.facebook.com/Cats.comFB/" tabIndex={-1}>
 							<img
 								className="link-list-button-icon"
 								src="https://img.icons8.com/ios-glyphs/90/0000ff/facebook-new.png"
@@ -42,8 +44,8 @@ export default function ContactHeader() {
 							/>
 						</Link>
 					</button>
-					<button className="link-list-button">
-						<Link href="https://x.com/tweetsofcats">
+					<button className="link-list-button" tabIndex={-1}>
+						<Link href="https://x.com/tweetsofcats" tabIndex={-1}>
 							<img
 								className="link-list-button-icon"
 								src="https://img.icons8.com/ios-filled/100/0000ff/twitter.png"
@@ -51,8 +53,10 @@ export default function ContactHeader() {
 							/>
 						</Link>
 					</button>
-					<button className="link-list-button">
-						<Link href="https://www.linkedin.com/posts/azurecollier_cats-catstagram-catsofinstagram-activity-7233942584040067072--72L">
+					<button className="link-list-button" tabIndex={-1}>
+						<Link
+							href="https://www.linkedin.com/posts/azurecollier_cats-catstagram-catsofinstagram-activity-7233942584040067072--72L"
+							tabIndex={-1}>
 							<img
 								className="link-list-button-icon"
 								src="https://img.icons8.com/ios-filled/100/0000ff/linkedin.png"
@@ -60,8 +64,10 @@ export default function ContactHeader() {
 							/>
 						</Link>
 					</button>
-					<button className="link-list-button">
-						<Link href="https://www.instagram.com/cats_of_instagram/">
+					<button className="link-list-button" tabIndex={-1}>
+						<Link
+							href="https://www.instagram.com/cats_of_instagram/"
+							tabIndex={-1}>
 							<img
 								className="link-list-button-icon"
 								src="https://img.icons8.com/ios-filled/100/0000ff/instagram.png"
@@ -69,8 +75,8 @@ export default function ContactHeader() {
 							/>
 						</Link>
 					</button>
-					<button className="link-list-button">
-						<Link href="https://www.reddit.com/r/cats">
+					<button className="link-list-button" tabIndex={-1}>
+						<Link href="https://www.reddit.com/r/cats" tabIndex={-1}>
 							<img
 								className="link-list-button-icon"
 								src="https://img.icons8.com/ios-filled/100/0000ff/reddit--v1.png"

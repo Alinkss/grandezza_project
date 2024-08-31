@@ -6,6 +6,7 @@ import '/styles/animations.css';
 import '/styles/contactForm.css';
 import '/styles/footer.css';
 import '/styles/authorizingForm.css';
+import '/styles/contact.css';
 import Header from '@/components/Header/Header';
 
 export const metadata: Metadata = {
@@ -18,9 +19,6 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	//TODO:
-	//? add tabIndex to header social network buttons
-
 	return (
 		<html lang="en">
 			<body className="h-screen flex flex-col">
