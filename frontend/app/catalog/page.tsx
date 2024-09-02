@@ -1,7 +1,6 @@
-import Header from '@/components/Catalog/Header';
-import Catalog from '@/components/Catalog/Catalog';
 import { Assortment } from '@/types/catalog';
 import axios from 'axios';
+import CatalogContent from './CatalogContent';
 
 export default async function CatalogPage() {
 	const assortment: Assortment = await axios
@@ -10,8 +9,7 @@ export default async function CatalogPage() {
 
 	return (
 		<div className="flex-[2_1_auto] flex flex-col">
-			<Header />
-			<Catalog pets={assortment.pets} categories={assortment.categories} />
+			<CatalogContent assortment={assortment} />
 		</div>
 	);
 }
