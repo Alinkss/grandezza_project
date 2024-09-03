@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+
+.contact-info {
+	@apply flex flex-row gap-6;
+}
+
+.contact-text-wrapper {
+	@apply flex flex-col gap-1;
+}
+
+.contact-icon-wrapper {
+	@apply flex flex-col justify-center items-center min-w-[40px];
+}

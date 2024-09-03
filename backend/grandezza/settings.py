@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'blog',
     'cart',
     'orders',
+    'django_extensions',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +56,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:3000',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
