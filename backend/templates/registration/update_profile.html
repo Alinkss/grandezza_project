@@ -9,69 +9,7 @@
     <div class="box-update">
         <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-        
-            <div class="form-row">
-                <div class="get-info">
-                    <label for="id_username">Username:</label>
-                    {{ user_update_form.username }}
-                </div>
-                <div class="get-info">
-                    <label for="id_first_name">First name:</label>
-                    {{ user_update_form.first_name }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="get-info">
-                    <label for="id_last_name">Last name:</label>
-                    {{ user_update_form.last_name }}
-                </div>
-                <div class="get-info">
-                    <label for="id_email">Email:</label>
-                    {{ user_update_form.email }}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="get-info">
-                    <label for="id_country">Country:</label>
-                    {{ profile_update_form.country }}
-                </div>
-                <div class="get-info">
-                    <label for="id_city">City:</label>
-                    {{ profile_update_form.city }}
-                </div>
-            </div>
-            <div class="form-row">
-                <label for="id_address">Address:</label>
-                {{ adress_setform.management_form }}
-                {% if adress_setform.non_form_errors %}
-                    <div class="alert alert-danger">
-                        {{ adress_setform.non_form_errors }}
-                    </div>
-                {% endif %}
-            </div>
-            <div id="addresses">
-                {% for form in adress_setform %}
-                    <div class="get-info">
-                        {{ form.non_field_errors }}
-                        {{ form.as_p }}
-                    </div>
-                {% empty %}
-                    <div class="get-info">
-                        {{ adress_setform.empty_form.non_field_errors }}
-                        {{ adress_setform.empty_form.as_p }}
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="form-row">
-                <div class="get-info">
-                    <label for="id_telephone">Telephone:</label>
-                    {{ profile_update_form.telephone }}
-                </div>
-                <div class="get-info">
-                    <label for="id_avatar">Avatar:</label>
-                    {{ avatar_form.avatar }}
-                </div>
-            </div>
+            {{ user_update_form.as_p }}
             <button type="submit" class="btn btn-success">Save</button>
         </form>
     </div>

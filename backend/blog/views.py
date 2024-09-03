@@ -13,7 +13,7 @@ from django import template
 
 
 from blog.models import Category, Post, Tag, Comments, Adress, PostImage, Profile
-from blog.forms import PostForm, PostImageForm, ImageFormSet, CommentsForm, AvatarForm, UserRegister, RegisterForm, UserUpdateForm, ProfileUpdate, AdressForm, AdressFormSet
+from blog.forms import PostForm, PostImageForm, ImageFormSet, CommentsForm, AvatarForm, UserRegister, UserUpdateForm, AdressForm, AdressFormSet
 
 
 def blog_main(request):
@@ -263,8 +263,12 @@ def comment_delete(request, post_id, comment_id):
             'success': False,
             'message': 'Comment not deleted successfully'
         })
+<<<<<<< HEAD
+        
+=======
 
 
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
 @login_required
 def create(request):
     if request.method == 'POST':
@@ -348,10 +352,17 @@ def profile(request, user_id):
     days_since_registration = (timezone.now() - user.date_joined).days
 
     liked_posts = Post.objects.filter(likes=user)
+<<<<<<< HEAD
+    
+    # avatar = profile.avatar.url
+    # background_pic = profile.background_pic.url
+    
+=======
 
     avatar = profile.avatar.url
     background_pic = profile.background_pic.url
 
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
         posts = Post.objects.get(id=post_id)
@@ -406,6 +417,12 @@ def profile(request, user_id):
 
 def registration(request):
     if request.method == 'POST':
+<<<<<<< HEAD
+        user_form = UserRegister(request.POST, request.FILES)
+        
+        if user_form.is_valid():
+            user = user_form.save(commit=True)
+=======
         user_form = UserRegister(request.POST)
         register_form = RegisterForm(request.POST, request.FILES)
         adress_form = AdressForm(request.POST)
@@ -420,6 +437,7 @@ def registration(request):
             adress.profile = register
             adress.save()
 
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
             login(request, user)
 
             user_form_data = {
@@ -430,6 +448,20 @@ def registration(request):
                 'email': user.email,
                 'date_joined': user.date_joined.isoformat()
             }
+<<<<<<< HEAD
+            
+            profile = user.profile
+            register_form_data = {
+                'user': user.id,
+                'telephone': profile.telephone,
+                'avatar': profile.avatar.url if profile.avatar else '',
+                'country': list(profile.country.values_list('name', flat=True)),
+                'city': list(profile.city.values_list('name', flat=True)), 
+                'background_pic': profile.background_pic.url if profile.background_pic else ''
+            }
+            
+            adress = profile.adress_set.first()
+=======
 
             register_form_data = {
                 'user': user.id,
@@ -440,6 +472,7 @@ def registration(request):
                 'background_pic': register.background_pic.url if register.background_pic else ''
             }
 
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
             adress_form_data = {
                 'id': adress.id,
                 'private_house_number': adress.private_house_number if adress.private_house_number else None,
@@ -471,13 +504,58 @@ def registration(request):
         else:
             errors = {
                 'user_form_errors': user_form.errors.as_json(),
-                'register_form_errors': register_form.errors.as_json(),
-                'adress_form_errors': adress_form.errors.as_json(),
             }
             return JsonResponse(errors, status=400)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+<<<<<<< HEAD
+# def registration(request):
+#     if request.method == 'POST':
+#         user_form = UserRegister(request.POST, request.FILES)
+#         adress_form = AdressForm(request.POST)
+
+#         if user_form.is_valid() and adress_form.is_valid():
+#             user = user_form.save(commit=False)
+#             user.save()
+#             profile = Profile.objects.create(
+#                 user=user,
+#                 avatar=user_form.cleaned_data.get('avatar'),
+#                 background_pic=user_form.cleaned_data.get('background_pic'),
+#                 telephone=user_form.cleaned_data.get('telephone')
+#             )
+#             profile.country.set(user_form.cleaned_data.get('country'))
+#             profile.city.set(user_form.cleaned_data.get('city'))
+#             profile.save()
+
+#             Adress.objects.create(
+#                 profile=profile,
+#                 private_house_number=user_form.cleaned_data.get('private_house_number'),
+#                 entrance_number=user_form.cleaned_data.get('entrance_number'),
+#                 flat_num=user_form.cleaned_data.get('flat_num'),
+#                 street=user_form.cleaned_data.get('street')
+#             )
+
+#             login(request, user)  # Log in the user
+#             return redirect('profile', user_id=user.id)
+#         else:
+#             # Print form errors for debugging
+#             print(user_form.errors)
+#             print(adress_form.errors)
+#             print(request.FILES)
+
+#     else:
+#         user_form = UserRegister()
+#         adress_form = AdressForm()
+
+#     context = {
+#         'user_form': user_form,
+#         'adress_form': adress_form,
+#     }
+
+#     return render(request, 'registration/register.html', context)
+=======
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
 
 class MyLogoutView(View):
     def get(self, request):
@@ -487,6 +565,35 @@ class MyLogoutView(View):
 
 @login_required
 def update_profile(request):
+<<<<<<< HEAD
+    if request.method == 'POST':
+        user_update_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        
+        if user_update_form.is_valid():
+            user = user_update_form.save(commit=False)
+            profile = user.profile
+
+
+            profile.telephone = user_update_form.cleaned_data['telephone']
+            profile.avatar = user_update_form.cleaned_data.get('avatar')
+            profile.background_pic = user_update_form.cleaned_data.get('background_pic')
+            profile.save()
+
+            profile.country.set(user_update_form.cleaned_data['country'])
+            profile.city.set(user_update_form.cleaned_data['city'])
+
+
+            address_data = {
+                'street': user_update_form.cleaned_data.get('street', ''),
+                'private_house_number': user_update_form.cleaned_data.get('private_house_number', ''),
+                'entrance_number': user_update_form.cleaned_data.get('entrance_number', ''),
+                'flat_num': user_update_form.cleaned_data.get('flat_num', ''),
+            }
+            address, created = Adress.objects.get_or_create(profile=profile)
+            for field, value in address_data.items():
+                setattr(address, field, value)
+            address.save()
+=======
     user_update_form = UserUpdateForm(request.POST, instance=request.user)
     profile_update_form = ProfileUpdate(
         request.POST, request.FILES, instance=request.user.profile)
@@ -503,44 +610,84 @@ def update_profile(request):
                 avatar_form.is_valid()):
 
             user_update = user_update_form.cleaned_data
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
 
             forms_data = {
                 'user_update': {
                     'is_valid': True,
                     'errors': None,
-                    'cleaned_data': user_update
+                    'cleaned_data': {
+                        'username': user.username,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name,
+                        'email': user.email
+                    }
                 },
                 'profile_update': {
                     'is_valid': True,
                     'errors': None,
                     'cleaned_data': {
+<<<<<<< HEAD
+                        'telephone': profile.telephone,
+                        'country': list(profile.country.values_list('name', flat=True)),
+                        'city': list(profile.city.values_list('name', flat=True)), 
+=======
                         'telephone': profile_update_form.cleaned_data.get('telephone'),
                         'country': list(profile_update_form.instance.country.values_list('name', flat=True)),
                         'city': list(profile_update_form.instance.city.values_list('name', flat=True)),
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
                     }
                 },
-                'adress_update': {
+                'address_update': {
                     'is_valid': True,
                     'errors': None,
-                    'cleaned_data': [
-                        {
-                            'street': form.cleaned_data['street'],
-                            'private_house_number': form.cleaned_data['private_house_number'],
-                            'entrance_number': form.cleaned_data['entrance_number'],
-                            'flat_num': form.cleaned_data['flat_num']
-                        }
-                        for form in adress_setform
-                    ]
+                    'cleaned_data': address_data
                 },
                 'avatar_update': {
                     'is_valid': True,
                     'errors': None,
+<<<<<<< HEAD
+                    'cleaned_data':{
+                        'avatar': profile.avatar.url if profile.avatar else None
+=======
                     'cleaned_data': {
                         'avatar': request.user.profile.avatar.url if request.user.profile.avatar else None
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
                     }
                 },
             }
 
+<<<<<<< HEAD
+            return JsonResponse(forms_data)
+        else:
+            errors = {
+                'user_form_errors': user_update_form.errors.as_json(),
+            }
+            return JsonResponse(errors, status=400)
+        
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+# @login_required
+# def update_profile(request):
+#     if request.method == 'POST':
+#         user_update_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        
+#         if user_update_form.is_valid():
+#             user_update_form.save()
+#             return redirect('profile', user_id=request.user.pk)
+#         else:
+#             print(user_update_form.errors)
+
+#     else:
+#         user_update_form = UserUpdateForm(instance=request.user)
+
+#     context = {
+#         'user_update_form': user_update_form,
+#     }
+
+#     return render(request, 'registration/update_profile.html', context)
+=======
             user_update_form.save()
             profile_update_form.save()
             adress_setform.save()
@@ -580,6 +727,7 @@ def update_profile(request):
     print('FILES data:', request.FILES)
 
     return JsonResponse(forms_data)
+>>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
 
 
 @login_required
