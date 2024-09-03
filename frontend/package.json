@@ -9,6 +9,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@heroicons/react": "^2.1.5",
 		"@nextui-org/react": "^2.4.6",
 		"@vis.gl/react-google-maps": "^1.1.0",
 		"axios": "^1.7.5",

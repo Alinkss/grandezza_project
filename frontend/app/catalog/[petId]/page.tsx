@@ -1,0 +1,20 @@
+import axios from 'axios';
+import PageContent from './PageContent';
+
+interface Props {
+	params: {
+		petId: string;
+	};
+}
+
+export default async function PetPage({ params: { petId } }: Props) {
+	const pet = await axios
+		.get(process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/product_detail/' + petId)
+		.then((res) => res.data.product);
+
+	return (
+		<div className="flex-[2_1_auto]">
+			<PageContent />
+		</div>
+	);
+}

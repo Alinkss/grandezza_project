@@ -19,10 +19,6 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	//TODO:
-	//? add custom error page
-	//? add pagination
-
 	return (
 		<html lang="en">
 			<body className="h-screen flex flex-col">

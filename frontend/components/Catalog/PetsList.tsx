@@ -1,6 +1,9 @@
-import { Category, Pet } from '@/types/catalog';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { PaginationBar } from './PaginationBar';
+import { paginate } from '@/assets/paginate';
+import { Category, Pet } from '@/types/catalog';
 
 interface Props {
 	pets: Pet[];
@@ -8,10 +11,19 @@ interface Props {
 }
 
 export default function PetsList({ pets, catagories }: Props) {
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const showingProductAmount = 6;
+
+	const petsForDisplay = paginate(pets, currentPage, showingProductAmount);
+
+	const onPageChange = (page: number) => {
+		setCurrentPage(page);
+	};
+
 	return (
-		<div className="w-[75%] p-12">
+		<div className="w-[75%] p-12 flex flex-col gap-8">
 			<div className="grid grid-cols-3 gap-12">
-				{pets.map((pet, index) => (
+				{petsForDisplay.map((pet, index) => (
 					<div
 						className="p-4 px-6 rounded-xl text-center bg-gray-300 flex flex-col gap-4"
 						key={index}>
@@ -47,6 +59,12 @@ export default function PetsList({ pets, catagories }: Props) {
 					</div>
 				))}
 			</div>
+			<PaginationBar
+				currentPage={currentPage}
+				onPageChange={onPageChange}
+				productsAmount={pets.length}
+				showingProductAmount={showingProductAmount}
+			/>
 		</div>
 	);
 }

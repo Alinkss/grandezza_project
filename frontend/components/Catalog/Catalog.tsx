@@ -10,18 +10,24 @@ interface Props {
 
 const allPetsCategory = { id: 0, name: 'All' };
 
-export default function Catalog({ pets, categories }: Props) {
-	const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-		0
-	);
+export default function Catalog({ pets: assortmentPets, categories }: Props) {
+	const [pets, setPets] = useState(assortmentPets);
+	const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
 
 	const selectCategory = (categoryId: number) => {
 		setSelectedCategoryId(categoryId);
 	};
 
 	useEffect(() => {
-		// make sort pets by category
-	}, [selectedCategoryId]);
+		if (selectedCategoryId === 0) setPets(assortmentPets);
+		else {
+			const sortedPets = assortmentPets.filter(
+				(pet) => pet.category_id === selectedCategoryId
+			);
+
+			setPets(sortedPets);
+		}
+	}, [assortmentPets, selectedCategoryId]);
 
 	return (
 		<div className="flex flex-row">

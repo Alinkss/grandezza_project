@@ -1,4 +1,4 @@
-const links = [
+const headerLinks = [
 	{
 		title: 'HOME',
 		link: '/',
@@ -16,13 +16,9 @@ const links = [
 		link: '/login',
 	},
 	{
-		title: 'PAGES',
-		link: '/pages',
-	},
-	{
 		title: 'CONTACT',
 		link: '/contact',
 	},
 ];
 
-export default links;
+export default headerLinks;
