@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+
+.header-list-link {
+	@apply m-auto text-gray-500 font-semibold tracking-wide transition hover:text-orange-400;
+}
+
+.header-list-link:hover {
+	.header-list-link > div {
+		@apply text-orange-400;
+	}
+}

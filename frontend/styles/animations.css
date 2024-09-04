@@ -1,0 +1,25 @@
+.appear-animation {
+	animation: appearAnimation 500ms linear;
+}
+
+@keyframes appearAnimation {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.disappear-animation {
+	animation: disappearAnimation 500ms linear;
+}
+
+@keyframes disappearAnimation {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}

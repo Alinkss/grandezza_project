@@ -28,7 +28,7 @@ def blog_main(request):
             post.likes.remove(user)
         else:
             post.likes.add(user)
-    
+
     paginator = Paginator(posts, 2)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -43,47 +43,50 @@ def blog_main(request):
         'categories': list(categories.values()),
         'liked_post_ids': liked_post_ids,
     }
-    
+
     return JsonResponse(context)
+
 
 def search(request):
     query = request.GET.get('query-search', '')
-    
-    post = Post.objects.filter(Q(title__icontains=query) | Q(user__username__icontains = query))
-    
+
+    post = Post.objects.filter(
+        Q(title__icontains=query) | Q(user__username__icontains=query))
+
     context = {
         'post': list(post.values()),
     }
-    
+
     return JsonResponse(context)
+
 
 def blog_categories(request, categ_id=None):
     category_obj = get_object_or_404(Category, pk=categ_id)
-    
-    posts = Post.objects.filter(category = category_obj).order_by('-published_date')
-    number_of_posts = Post.objects.filter(category = category_obj).count()
-    
+
+    posts = Post.objects.filter(
+        category=category_obj).order_by('-published_date')
+    number_of_posts = Post.objects.filter(category=category_obj).count()
+
     paginator = Paginator(posts, 2)
-    
+
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
     context = {
         'posts': list(posts.values()),
         'number_of_posts': number_of_posts,
         'page_obj': list(page_obj.object_list.values()),
     }
-    
-    return JsonResponse(context)
 
+    return JsonResponse(context)
 
 
 def post(request, post_id=None):
     post = get_object_or_404(Post, id=post_id)
-    comments = Comments.objects.filter(post = post).order_by('-published_date')
+    comments = Comments.objects.filter(post=post).order_by('-published_date')
     user = request.user
     user_has_liked = post.likes.filter(id=user.id).exists()
-    
+
     if request.method == 'POST':
         comments_form = CommentsForm(request.POST)
         if comments_form.is_valid():
@@ -92,32 +95,31 @@ def post(request, post_id=None):
             comment.post = post
             comment.published_date = now()
             comment.save()
-            
+
             user_data = {
                 'username': user.username
             }
 
-            
             comments_cd = {
                 'id': comment.id,
                 'text': comment.text,
                 'published_date': comment.published_date.isoformat(),
                 'user': user_data
             }
-            
+
             form_data = {
                 'is_valid': True,
                 'errors': None,
                 'cleaned_data': comments_cd
             }
-            
+
             return JsonResponse(form_data)
         if user_has_liked:
             post.likes.remove(user)
             user_has_liked = False
         else:
             post.likes.add(user)
-    
+
     context = {
         'post': {
             'id': post.id,
@@ -129,8 +131,9 @@ def post(request, post_id=None):
         'comments': list(comments.values()),
         'user_has_liked': user_has_liked,
     }
-    
+
     return JsonResponse(context)
+
 
 @login_required
 def likes(request, post_id):
@@ -138,7 +141,7 @@ def likes(request, post_id):
     user = request.user
     user_has_liked = post.likes.filter(id=user.id).exists()
     print(f"Debug: user_has_liked={user_has_liked}")
-    
+
     if request.method == 'POST':
         if user_has_liked:
             post.likes.remove(user)
@@ -148,13 +151,13 @@ def likes(request, post_id):
             post.likes.add(user)
             user_has_liked = True
             print(f"Debug: User liked post. user_has_liked={user_has_liked}")
-            
+
     post_user = {
         'id': post.user.id,
         'username': post.user.username,
         'email': post.user.email
-    }        
-            
+    }
+
     context = {
         'post': {
             'id': post.id,
@@ -166,25 +169,26 @@ def likes(request, post_id):
         },
         'user_has_liked': user_has_liked,
     }
-    
+
     return JsonResponse(context)
+
 
 def comment_button(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    
+
     if request.method == 'POST':
         user_data = {
             'id': request.user.id,
             'username': request.user.username
         }
-            
+
         category_data = {
             'id': post.category.id,
             'name': post.category.name
         } if post.category else None
-            
+
         image_urls = []
-            
+
         post_cd = {
             'id': post.id,
             'title': post.title,
@@ -193,7 +197,7 @@ def comment_button(request, post_id):
             'user': user_data,
             'category': category_data
         }
-        
+
         form_data = {
             'post_form': {
                 'is_valid': True,
@@ -206,19 +210,19 @@ def comment_button(request, post_id):
                 'cleaned_data': image_urls
             }
         }
-        
+
         user_data = {
             'id': request.user.id,
             'username': request.user.username
         }
-            
+
         category_data = {
             'id': post.category.id,
             'name': post.category.name
         } if post.category else None
-            
+
         image_urls = []
-            
+
         post_cd = {
             'id': post.id,
             'title': post.title,
@@ -227,7 +231,7 @@ def comment_button(request, post_id):
             'user': user_data,
             'category': category_data
         }
-        
+
         form_data = {
             'post_form': {
                 'is_valid': True,
@@ -240,19 +244,20 @@ def comment_button(request, post_id):
                 'cleaned_data': image_urls
             }
         }
-        
+
     return JsonResponse(form_data)
+
 
 def comment_delete(request, post_id, comment_id):
     post = get_object_or_404(Post, id=post_id)
     comments = get_object_or_404(Comments, id=comment_id)
-    
+
     if request.method == "POST":
         if request.user.is_authenticated and request.user == comments.user:
             if request.user == comments.user:
                 comments.delete()
                 return JsonResponse({'success': True, 'message': 'Comment deleted successfully'})
-            
+
         return JsonResponse({
             'success': False,
             'message': 'Comment not deleted successfully'
@@ -262,25 +267,26 @@ def comment_delete(request, post_id, comment_id):
 def create(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
-        image_form = ImageFormSet(request.POST, request.FILES, queryset=PostImage.objects.none())
+        image_form = ImageFormSet(
+            request.POST, request.FILES, queryset=PostImage.objects.none())
         if form.is_valid() and image_form.is_valid():
             post = form.save(commit=False)
             post.published_date = now()
             post.user = request.user
             post.save()
-            
+
             user_data = {
                 'id': request.user.id,
                 'username': request.user.username
             }
-            
+
             category_data = {
                 'id': post.category.id,
                 'name': post.category.name
             } if post.category else None
-            
+
             image_urls = []
-            
+
             post_cd = {
                 'id': post.id,
                 'title': post.title,
@@ -289,7 +295,7 @@ def create(request):
                 'user': user_data,
                 'category': category_data
             }
-            
+
             form_data = {
                 'post_form': {
                     'is_valid': True,
@@ -302,17 +308,19 @@ def create(request):
                     'cleaned_data': image_urls
                 }
             }
-    
+
             for form in image_form.cleaned_data:
                 if form:
                     image = form['image']
-                    post_image = PostImage.objects.create(post=post, image=image)
+                    post_image = PostImage.objects.create(
+                        post=post, image=image)
                     image_urls.append(post_image.image.url)
-                    
+
             return JsonResponse(form_data)
         else:
             form_errors = form.errors.as_json() if not form.is_valid() else None
-            image_form_errors = image_form.errors.as_json() if not image_form.is_valid() else None
+            image_form_errors = image_form.errors.as_json(
+            ) if not image_form.is_valid() else None
 
             errors = {
                 'post_form_errors': form_errors,
@@ -320,22 +328,23 @@ def create(request):
             }
 
             return JsonResponse(errors, status=400)
-        
+
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 
 @login_required
 def profile(request, user_id):
-    user = User.objects.get(id = user_id)
-    profile = get_object_or_404(Profile, user = user)
-    
-    posts = Post.objects.filter(user = user).order_by('-published_date')
-    comments = Comments.objects.filter(user = user)
-    adresses = Adress.objects.filter(profile = profile)
-    
-    posts_number = Post.objects.filter(user = user).count()
-    comments_number = Comments.objects.filter(user = user).count()
+    user = User.objects.get(id=user_id)
+    profile = get_object_or_404(Profile, user=user)
+
+    posts = Post.objects.filter(user=user).order_by('-published_date')
+    comments = Comments.objects.filter(user=user)
+    adresses = Adress.objects.filter(profile=profile)
+
+    posts_number = Post.objects.filter(user=user).count()
+    comments_number = Comments.objects.filter(user=user).count()
     days_since_registration = (timezone.now() - user.date_joined).days
-    
+
     liked_posts = Post.objects.filter(likes=user)
     
     # avatar = profile.avatar.url
@@ -348,24 +357,28 @@ def profile(request, user_id):
             post.liked.remove(user)
         else:
             post.liked.add(user)
-            
+
     liked_posts_id = list(user.likes.values_list('id', flat=True))
 
-    
     user_serial = {
         'id': user.id,
         'username': user.username
     }
-    countries_serial = list(profile.country.values('id', 'name')) if profile.country.exists() else []
-    cities_serial = list(profile.city.values('id', 'name')) if profile.city.exists() else []
-    
-    adresses_serial = list(adresses.values('id', 'street', 'private_house_number', 'entrance_number', 'flat_num'))
-    liked_posts_serial = list(liked_posts.values('id', 'title', 'content', 'published_date'))
-    posts_serial = list(posts.values('id', 'title', 'content', 'published_date'))
+    countries_serial = list(profile.country.values(
+        'id', 'name')) if profile.country.exists() else []
+    cities_serial = list(profile.city.values('id', 'name')
+                         ) if profile.city.exists() else []
+
+    adresses_serial = list(adresses.values(
+        'id', 'street', 'private_house_number', 'entrance_number', 'flat_num'))
+    liked_posts_serial = list(liked_posts.values(
+        'id', 'title', 'content', 'published_date'))
+    posts_serial = list(posts.values(
+        'id', 'title', 'content', 'published_date'))
     comments_serial = list(comments.values('id', 'text', 'published_date'))
-    
+
     liked_posts_id = list(user.likes.values_list('id', flat=True))
-    
+
     context = {
         'user': user_serial,
         'profile': {
@@ -385,8 +398,9 @@ def profile(request, user_id):
         'liked_posts': liked_posts_serial,
         'liked_posts_id': liked_posts_id,
     }
-    
+
     return JsonResponse(context)
+
 
 def registration(request):
     if request.method == 'POST':
@@ -395,7 +409,7 @@ def registration(request):
         if user_form.is_valid():
             user = user_form.save(commit=True)
             login(request, user)
-            
+
             user_form_data = {
                 'id': user.id,
                 'username': user.username,
@@ -424,12 +438,12 @@ def registration(request):
                 'flat_num': adress.flat_num if adress.flat_num else None,
                 'profile_id': adress.profile.id
             }
-            
+
             forms_data = {
                 'user_check': {
                     'is_valid': True,
                     'errors': None,
-                    'cleaned_data': user_form_data        
+                    'cleaned_data': user_form_data
                 },
                 'register_check': {
                     'is_valid': True,
@@ -442,14 +456,14 @@ def registration(request):
                     'cleaned_data': adress_form_data
                 }
             }
-            
+
             return JsonResponse(forms_data)
         else:
             errors = {
                 'user_form_errors': user_form.errors.as_json(),
             }
             return JsonResponse(errors, status=400)
-        
+
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 # def registration(request):
@@ -502,7 +516,8 @@ class MyLogoutView(View):
         logout(request)
         return redirect('main')
 
-@login_required    
+
+@login_required
 def update_profile(request):
     if request.method == 'POST':
         user_update_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
@@ -595,6 +610,7 @@ def update_profile(request):
 #     }
 
 #     return render(request, 'registration/update_profile.html', context)
+
 
 @login_required
 def my_view(request):

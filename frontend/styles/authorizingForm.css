@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+
+.inputWrapper {
+	@apply flex flex-col gap-[0.2rem];
+}
+
+.placeholderWrapper {
+	@apply flex flex-row justify-between;
+}
+
+.placeholder {
+	@apply text-[0.8rem] text-gray-400 font-[Tahoma];
+}
+
+.error {
+	@apply text-red-500 text-[0.8rem];
+}
+
+.input {
+	@apply flex h-10 w-full rounded-md border px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.submitButton {
+	@apply text-white font-bold bg-[#03c03c] rounded-[0.4rem] p-2;
+}
+
+.submitButton:disabled {
+	@apply bg-[#06a235];
+}
+
+.submitButton:hover {
+	@apply bg-[#05d042];
+	transition: 150ms linear all;
+}
+
+.submitButton:disabled:hover {
+	@apply bg-[#06a235];
+}
