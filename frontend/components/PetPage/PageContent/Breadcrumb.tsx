@@ -10,12 +10,11 @@ export default function Breadcrumb({ productTitle }: Props) {
 			<ol
 				role="list"
 				className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-				{/* Breadcrumb */}
 				<li>
 					<div className="flex items-center">
 						<Link
-							href="/assortment"
-							className="mr-2 text-sm font-medium text-gray-900 dark:text-white">
+							href="/catalog"
+							className="mr-2 text-sm font-medium text-gray-900">
 							assortment
 						</Link>
 						<svg
@@ -32,7 +31,7 @@ export default function Breadcrumb({ productTitle }: Props) {
 				<li className="text-sm">
 					<p
 						aria-current="page"
-						className="font-medium cursor-pointer text-gray-500 dark:text-white hover:text-gray-600">
+						className="font-medium cursor-pointer text-gray-500 hover:text-gray-600">
 						{productTitle}
 					</p>
 				</li>

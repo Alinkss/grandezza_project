@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { PaginationBar } from './PaginationBar';
 import { paginate } from '@/assets/paginate';
 import { Category, Pet } from '@/types/catalog';
+import { addToCart } from '@/app/store/storeUtils';
 
 interface Props {
 	pets: Pet[];
@@ -19,6 +20,13 @@ export default function PetsList({ pets, catagories }: Props) {
 	const onPageChange = (page: number) => {
 		setCurrentPage(page);
 	};
+
+	if (!petsForDisplay.length)
+		return (
+			<div className="w-[75%] flex justify-center items-center">
+				<p className="text-xl">No pets match your search parameters</p>
+			</div>
+		);
 
 	return (
 		<div className="w-[75%] p-12 flex flex-col gap-8">
@@ -52,7 +60,9 @@ export default function PetsList({ pets, catagories }: Props) {
 						</div>
 						<div className="flex flex-row justify-between">
 							<p className="my-auto text-lg">${parseInt(pet.price)}</p>
-							<button className="px-2 py-1 rounded-lg bg-[#e100ff] text-white font-semibold">
+							<button
+								className="px-2 py-1 rounded-lg bg-[#e100ff] text-white font-semibold"
+								onClick={() => addToCart(pet)}>
 								Add to cart
 							</button>
 						</div>

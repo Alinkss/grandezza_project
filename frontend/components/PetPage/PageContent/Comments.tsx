@@ -1,10 +1,9 @@
 import { LegacyRef, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { useUserData } from '@/hooks/useUserDataContext';
-import { IComment, CommentType } from '@/types/commentTypes';
-import Schema from '@/assets/validationSchemas';
+import { newCommentValidateSchema } from '@/assets/validationSchemas';
+import { CommentType } from '@/types/comment';
 import { Formik } from 'formik';
-import { v4 as uuidv4 } from 'uuid';
+import { store } from '@/app/store/store';
 
 interface Props {
 	productComments: CommentType;
@@ -21,7 +20,6 @@ export default function Comments({
 }: Props) {
 	return (
 		<>
-			{/* Comments */}
 			<div className="col-span-2 row-span-2">
 				<div className="p-4 flex flex-col gap-4">
 					{productComments.length ? (
@@ -70,7 +68,7 @@ export default function Comments({
 }
 
 function CommentForm({ sendCommentToServer }: CommentFormProps) {
-	const authorizeUserData = useUserData();
+	const isUserAuthorized = !!store.getState().user?.sessionId;
 	const inputNewCommentRef = useRef<HTMLTextAreaElement>();
 	const sendNewCommentButtonRef = useRef<HTMLButtonElement>();
 
@@ -92,20 +90,18 @@ function CommentForm({ sendCommentToServer }: CommentFormProps) {
 	}, [inputNewCommentRef]);
 
 	useEffect(() => {
-		const didUserAuthorized = !authorizeUserData.data?.name;
-
 		if (sendNewCommentButtonRef.current)
-			sendNewCommentButtonRef.current.disabled = didUserAuthorized;
+			sendNewCommentButtonRef.current.disabled = !isUserAuthorized;
 		if (inputNewCommentRef.current)
-			inputNewCommentRef.current.disabled = didUserAuthorized;
-	}, [authorizeUserData]);
+			inputNewCommentRef.current.disabled = !isUserAuthorized;
+	}, [isUserAuthorized]);
 
 	return (
 		<Formik
 			initialValues={{
 				newCommentText: '',
 			}}
-			validationSchema={Schema.NewCommentValidateSchema}
+			validationSchema={newCommentValidateSchema}
 			onSubmit={(values, { setSubmitting, resetForm }) => {
 				setTimeout(() => {
 					sendCommentToServer(values.newCommentText);
@@ -130,7 +126,7 @@ function CommentForm({ sendCommentToServer }: CommentFormProps) {
 							className="resize-none overflow-hidden py-2 px-4 border border-gray-300 rounded-l-md flex-1 dark:text-black"
 							name="newCommentText"
 							placeholder={
-								authorizeUserData.data?.name
+								isUserAuthorized
 									? 'Enter comment'
 									: 'Not available to unauthorized users'
 							}
@@ -140,7 +136,7 @@ function CommentForm({ sendCommentToServer }: CommentFormProps) {
 							value={values.newCommentText}
 						/>
 						<button
-							className="disabled:opacity-30 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r-md dark:bg-[orange]"
+							className="disabled:opacity-40 text-white font-bold py-2 px-4 rounded-r-md bg-[orange] hover:bg-orange-400"
 							type="submit"
 							disabled={isSubmitting}
 							ref={sendNewCommentButtonRef as LegacyRef<HTMLButtonElement>}>
@@ -153,9 +149,11 @@ function CommentForm({ sendCommentToServer }: CommentFormProps) {
 							/>
 						</button>
 					</div>
-					{errors.newCommentText &&
-						touched.newCommentText &&
-						errors.newCommentText}
+					<p className="error">
+						{errors.newCommentText &&
+							touched.newCommentText &&
+							errors.newCommentText}
+					</p>
 				</form>
 			)}
 		</Formik>

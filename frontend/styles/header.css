@@ -10,3 +10,7 @@
 		@apply text-orange-400;
 	}
 }
+
+.header-list-separator {
+	@apply w-[2px] bg-gray-300;
+}
