@@ -1,5 +1,5 @@
 import axios from 'axios';
-import PageContent from './PageContent';
+import PageContent from './PetPageContent';
 
 interface Props {
 	params: {

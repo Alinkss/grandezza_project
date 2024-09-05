@@ -4,40 +4,28 @@ import PhotoCarousel from '@/components/PetPage/PhotoCarousel';
 import Title from '@/components/PetPage/Title';
 import Option from '@/components/PetPage/Option';
 import Details from '@/components/PetPage/Details';
-import Comments from '@/components/PetPage/Comments';
 import { useEffect, useState } from 'react';
 import { ShowSuccessNotification } from '@/components/PetPage/ShowSuccessNotification';
 import { addToCart } from '@/app/store/storeUtils';
-import { v4 as uuidv4 } from 'uuid';
-import { Pet } from '@/types/catalog';
+import { Product } from '@/types/catalog';
 import { CommentType } from '@/types/comment';
-import axios from 'axios';
+import Comments from '@/components/PetPage/Comments';
 
 interface Props {
-	pet: Pet;
+	product: Product;
 }
 
-export default function PageContent({ pet }: Props) {
+export default function ProductPageContent({ product }: Props) {
 	const [isOpenSuccessWindow, setIsOpenSuccessWindow] =
 		useState<boolean>(false);
 	const productComments: CommentType = [];
 
 	const handleClickBuyButton = () => {
-		addToCart(pet);
+		addToCart(product);
 		setIsOpenSuccessWindow(true);
 	};
 
-	const sendCommentToServer = async (newCommentText: string) => {
-		const newComment = new FormData();
-		newComment.append('id', uuidv4());
-		newComment.append('product.id', pet.id.toString());
-		newComment.append('text', newCommentText);
-
-		await axios.post(
-			process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/comments/' + pet.id,
-			newComment
-		);
-	};
+	const sendCommentToServer = async () => {};
 
 	useEffect(() => {
 		if (!isOpenSuccessWindow) return;
@@ -54,17 +42,17 @@ export default function PageContent({ pet }: Props) {
 			)}
 
 			<div className="pt-6">
-				<Breadcrumb productTitle={pet.name} />
-				<PhotoCarousel imagePath={'/' + pet.images} />
+				<Breadcrumb productTitle={product.name} />
+				<PhotoCarousel imagePath={'/' + product.image} />
 
 				<div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
-					<Title title={pet.name} />
+					<Title title={product.name} />
 					<Option
-						productPrice={parseInt(pet.price)}
+						productPrice={parseInt(product.price)}
 						commentsAmount={productComments.length}
 						handleClickBuyButton={handleClickBuyButton}
 					/>
-					<Details productDescription={pet.description} />
+					<Details productDescription={product.description} />
 					<Comments
 						productComments={productComments}
 						sendCommentToServer={sendCommentToServer}
