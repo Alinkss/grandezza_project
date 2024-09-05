@@ -152,4 +152,8 @@ class AdressForm(forms.ModelForm):
         fields = ['street', 'private_house_number', 'entrance_number', 'flat_num',]
         
 AdressFormSet = inlineformset_factory(Profile, Adress, form=AdressForm, extra=0, can_delete= True)
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=200)
+    password = forms.CharField(max_length=200, widget=forms.PasswordInput)
         

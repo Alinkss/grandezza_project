@@ -10,10 +10,14 @@ from django.utils import timezone
 from django.views import View
 from django.core.paginator import Paginator
 from django import template
-
+from django.core.mail import send_mail
+from django.conf import settings
+import jwt
+from datetime import datetime, timedelta
+from django.contrib.auth import authenticate
 
 from blog.models import Category, Post, Tag, Comments, Adress, PostImage, Profile
-from blog.forms import PostForm, PostImageForm, ImageFormSet, CommentsForm, AvatarForm, UserRegister, UserUpdateForm, AdressForm, AdressFormSet
+from blog.forms import PostForm, PostImageForm, ImageFormSet, CommentsForm, AvatarForm, UserRegister, UserUpdateForm, AdressForm, AdressFormSet, LoginForm
 
 def blog_main(request):
     posts = Post.objects.all().order_by('-published_date')
@@ -331,7 +335,6 @@ def create(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-
 @login_required
 def profile(request, user_id):
     user = User.objects.get(id=user_id)
@@ -401,6 +404,16 @@ def profile(request, user_id):
 
     return JsonResponse(context)
 
+def jwt_token(user):
+    payload = {
+        'user_id': user.id,
+        'username': user.username,
+        'exp': datetime.utcnow() + settings.JWT_EXPIRATION_DELTA,
+        'iat': datetime.utcnow()
+    }
+    
+    token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm='HS256')
+    return token
 
 def registration(request):
     if request.method == 'POST':
@@ -408,7 +421,8 @@ def registration(request):
         
         if user_form.is_valid():
             user = user_form.save(commit=True)
-            login(request, user)
+            token = jwt_token(user)
+            # login(request, user)
 
             user_form_data = {
                 'id': user.id,
@@ -454,9 +468,20 @@ def registration(request):
                     'is_valid': True,
                     'errors': None,
                     'cleaned_data': adress_form_data
-                }
+                },
+                'token': token
             }
-
+            
+            subject = 'Welcome to Grandezza!'
+            message = f"""
+            Hi {user.username}, 
+            Thank you for registration at our side!
+            
+            """
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+            send_mail(subject, message, email_from, recipient_list)
+            
             return JsonResponse(forms_data)
         else:
             errors = {
@@ -464,6 +489,38 @@ def registration(request):
             }
             return JsonResponse(errors, status=400)
 
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+def login_jwt(request):
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            
+            if user is not None:
+                token = jwt_token(user)
+                
+                user_data = {
+                    'id': user.id,
+                    'username': user.username,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'email': user.email
+                }
+                
+                response_data = {
+                    'user': user_data,
+                    'token': token
+                }
+                
+                return JsonResponse(response_data)
+            else:
+                return JsonResponse({'error': 'Invalid credentials'}, status=401)
+        else:
+            return JsonResponse({'errors': login_form.errors.as_json()}, status=400)
+    
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 # def registration(request):
@@ -491,11 +548,19 @@ def registration(request):
 #                 flat_num=user_form.cleaned_data.get('flat_num'),
 #                 street=user_form.cleaned_data.get('street')
 #             )
-
-#             login(request, user)  # Log in the user
+#             token = jwt_token(user)
+#             # login(request, user)
+#             subject = 'Welcome to Grandezza!'
+#             message = f"""
+#             Hi {user.username}, 
+#             Thank you for registration at our side!
+            
+#             """
+#             email_from = settings.EMAIL_HOST_USER
+#             recipient_list = [user.email]
+#             send_mail(subject, message, email_from, recipient_list)
 #             return redirect('profile', user_id=user.id)
 #         else:
-#             # Print form errors for debugging
 #             print(user_form.errors)
 #             print(adress_form.errors)
 #             print(request.FILES)
@@ -511,10 +576,10 @@ def registration(request):
 
 #     return render(request, 'registration/register.html', context)
 
-class MyLogoutView(View):
-    def get(self, request):
-        logout(request)
-        return redirect('main')
+def logout_jwt(request):
+    if request.method == 'POST':
+        return JsonResponse({'message': 'you succesfully logout'})
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
 @login_required
