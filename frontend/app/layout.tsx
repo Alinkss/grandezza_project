@@ -20,6 +20,11 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
+	//TODO:
+	//? make confirm purchase
+	//? make responsive design
+	//? make comments
+
 	return (
 		<html lang="en">
 			<body className="h-screen flex flex-col">

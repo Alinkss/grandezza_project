@@ -8,6 +8,10 @@ const headerLinks = [
 		link: '/catalog',
 	},
 	{
+		title: 'CART',
+		link: '/cart',
+	},
+	{
 		title: 'BLOG',
 		link: '/blog',
 	},

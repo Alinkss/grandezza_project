@@ -2,9 +2,12 @@
 import { store } from '@/app/store/store';
 import { clearCart } from '@/app/store/storeUtils';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function ManageButtons() {
-	const isCartEmpty = store.getState().cart?.length === 0;
+	const [isCartEmpty, setIsCartEmpty] = useState(
+		store.getState().cart?.length === 0
+	);
 	const router = useRouter();
 
 	const handleContinueShopping = () => {
@@ -13,7 +16,8 @@ export default function ManageButtons() {
 
 	const handleClearCart = () => {
 		clearCart();
-		router.refresh(); // not working
+		router.refresh();
+		setIsCartEmpty(true);
 	};
 
 	const handleConfirmPurchase = () => {
