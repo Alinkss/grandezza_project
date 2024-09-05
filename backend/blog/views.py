@@ -10,11 +10,14 @@ from django.utils import timezone
 from django.views import View
 from django.core.paginator import Paginator
 from django import template
-
+from django.core.mail import send_mail
+from django.conf import settings
+import jwt
+from datetime import datetime, timedelta
+from django.contrib.auth import authenticate
 
 from blog.models import Category, Post, Tag, Comments, Adress, PostImage, Profile
-from blog.forms import PostForm, PostImageForm, ImageFormSet, CommentsForm, AvatarForm, UserRegister, UserUpdateForm, AdressForm, AdressFormSet
-
+from blog.forms import PostForm, PostImageForm, ImageFormSet, CommentsForm, AvatarForm, UserRegister, UserUpdateForm, AdressForm, AdressFormSet, LoginForm
 
 def blog_main(request):
     posts = Post.objects.all().order_by('-published_date')
@@ -263,12 +266,7 @@ def comment_delete(request, post_id, comment_id):
             'success': False,
             'message': 'Comment not deleted successfully'
         })
-<<<<<<< HEAD
         
-=======
-
-
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
 @login_required
 def create(request):
     if request.method == 'POST':
@@ -337,7 +335,6 @@ def create(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-
 @login_required
 def profile(request, user_id):
     user = User.objects.get(id=user_id)
@@ -352,17 +349,10 @@ def profile(request, user_id):
     days_since_registration = (timezone.now() - user.date_joined).days
 
     liked_posts = Post.objects.filter(likes=user)
-<<<<<<< HEAD
     
     # avatar = profile.avatar.url
     # background_pic = profile.background_pic.url
     
-=======
-
-    avatar = profile.avatar.url
-    background_pic = profile.background_pic.url
-
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
         posts = Post.objects.get(id=post_id)
@@ -414,31 +404,25 @@ def profile(request, user_id):
 
     return JsonResponse(context)
 
+def jwt_token(user):
+    payload = {
+        'user_id': user.id,
+        'username': user.username,
+        'exp': datetime.utcnow() + settings.JWT_EXPIRATION_DELTA,
+        'iat': datetime.utcnow()
+    }
+    
+    token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm='HS256')
+    return token
 
 def registration(request):
     if request.method == 'POST':
-<<<<<<< HEAD
         user_form = UserRegister(request.POST, request.FILES)
         
         if user_form.is_valid():
             user = user_form.save(commit=True)
-=======
-        user_form = UserRegister(request.POST)
-        register_form = RegisterForm(request.POST, request.FILES)
-        adress_form = AdressForm(request.POST)
-
-        if user_form.is_valid() and register_form.is_valid() and adress_form.is_valid():
-            user = user_form.save()
-            register = register_form.save(commit=False)
-            register.user = user
-            register.save()
-
-            adress = adress_form.save(commit=False)
-            adress.profile = register
-            adress.save()
-
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
-            login(request, user)
+            token = jwt_token(user)
+            # login(request, user)
 
             user_form_data = {
                 'id': user.id,
@@ -448,7 +432,6 @@ def registration(request):
                 'email': user.email,
                 'date_joined': user.date_joined.isoformat()
             }
-<<<<<<< HEAD
             
             profile = user.profile
             register_form_data = {
@@ -461,18 +444,6 @@ def registration(request):
             }
             
             adress = profile.adress_set.first()
-=======
-
-            register_form_data = {
-                'user': user.id,
-                'telephone': register.telephone,
-                'avatar': register.avatar.url if register.avatar else '',
-                'country': list(register_form.instance.country.values_list('name', flat=True)),
-                'city': list(register_form.instance.city.values_list('name', flat=True)),
-                'background_pic': register.background_pic.url if register.background_pic else ''
-            }
-
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
             adress_form_data = {
                 'id': adress.id,
                 'private_house_number': adress.private_house_number if adress.private_house_number else None,
@@ -497,9 +468,20 @@ def registration(request):
                     'is_valid': True,
                     'errors': None,
                     'cleaned_data': adress_form_data
-                }
+                },
+                'token': token
             }
-
+            
+            subject = 'Welcome to Grandezza!'
+            message = f"""
+            Hi {user.username}, 
+            Thank you for registration at our side!
+            
+            """
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+            send_mail(subject, message, email_from, recipient_list)
+            
             return JsonResponse(forms_data)
         else:
             errors = {
@@ -509,7 +491,38 @@ def registration(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-<<<<<<< HEAD
+def login_jwt(request):
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            
+            if user is not None:
+                token = jwt_token(user)
+                
+                user_data = {
+                    'id': user.id,
+                    'username': user.username,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'email': user.email
+                }
+                
+                response_data = {
+                    'user': user_data,
+                    'token': token
+                }
+                
+                return JsonResponse(response_data)
+            else:
+                return JsonResponse({'error': 'Invalid credentials'}, status=401)
+        else:
+            return JsonResponse({'errors': login_form.errors.as_json()}, status=400)
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 # def registration(request):
 #     if request.method == 'POST':
 #         user_form = UserRegister(request.POST, request.FILES)
@@ -535,11 +548,19 @@ def registration(request):
 #                 flat_num=user_form.cleaned_data.get('flat_num'),
 #                 street=user_form.cleaned_data.get('street')
 #             )
-
-#             login(request, user)  # Log in the user
+#             token = jwt_token(user)
+#             # login(request, user)
+#             subject = 'Welcome to Grandezza!'
+#             message = f"""
+#             Hi {user.username}, 
+#             Thank you for registration at our side!
+            
+#             """
+#             email_from = settings.EMAIL_HOST_USER
+#             recipient_list = [user.email]
+#             send_mail(subject, message, email_from, recipient_list)
 #             return redirect('profile', user_id=user.id)
 #         else:
-#             # Print form errors for debugging
 #             print(user_form.errors)
 #             print(adress_form.errors)
 #             print(request.FILES)
@@ -554,18 +575,15 @@ def registration(request):
 #     }
 
 #     return render(request, 'registration/register.html', context)
-=======
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
 
-class MyLogoutView(View):
-    def get(self, request):
-        logout(request)
-        return redirect('main')
+def logout_jwt(request):
+    if request.method == 'POST':
+        return JsonResponse({'message': 'you succesfully logout'})
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
 @login_required
 def update_profile(request):
-<<<<<<< HEAD
     if request.method == 'POST':
         user_update_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         
@@ -593,24 +611,6 @@ def update_profile(request):
             for field, value in address_data.items():
                 setattr(address, field, value)
             address.save()
-=======
-    user_update_form = UserUpdateForm(request.POST, instance=request.user)
-    profile_update_form = ProfileUpdate(
-        request.POST, request.FILES, instance=request.user.profile)
-    adress_setform = AdressFormSet(
-        request.POST, request.FILES,  instance=request.user.profile)
-    avatar_form = AvatarForm(request.POST, request.FILES,
-                             instance=request.user.profile)
-
-    if request.method == 'POST':
-
-        if (user_update_form.is_valid() and
-            profile_update_form.is_valid() and
-            adress_setform.is_valid() and
-                avatar_form.is_valid()):
-
-            user_update = user_update_form.cleaned_data
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
 
             forms_data = {
                 'user_update': {
@@ -627,15 +627,9 @@ def update_profile(request):
                     'is_valid': True,
                     'errors': None,
                     'cleaned_data': {
-<<<<<<< HEAD
                         'telephone': profile.telephone,
                         'country': list(profile.country.values_list('name', flat=True)),
                         'city': list(profile.city.values_list('name', flat=True)), 
-=======
-                        'telephone': profile_update_form.cleaned_data.get('telephone'),
-                        'country': list(profile_update_form.instance.country.values_list('name', flat=True)),
-                        'city': list(profile_update_form.instance.city.values_list('name', flat=True)),
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
                     }
                 },
                 'address_update': {
@@ -646,18 +640,12 @@ def update_profile(request):
                 'avatar_update': {
                     'is_valid': True,
                     'errors': None,
-<<<<<<< HEAD
                     'cleaned_data':{
                         'avatar': profile.avatar.url if profile.avatar else None
-=======
-                    'cleaned_data': {
-                        'avatar': request.user.profile.avatar.url if request.user.profile.avatar else None
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
                     }
                 },
             }
 
-<<<<<<< HEAD
             return JsonResponse(forms_data)
         else:
             errors = {
@@ -687,47 +675,6 @@ def update_profile(request):
 #     }
 
 #     return render(request, 'registration/update_profile.html', context)
-=======
-            user_update_form.save()
-            profile_update_form.save()
-            adress_setform.save()
-            avatar_form.save()
-
-            return JsonResponse(forms_data)
-
-    forms_data = {
-        'user_update': {
-            'is_valid': user_update_form.is_valid(),
-            'errors': user_update_form.errors.as_json(),
-            'cleaned_data': None
-        },
-        'profile_update': {
-            'is_valid': profile_update_form.is_valid(),
-            'errors': profile_update_form.errors.as_json(),
-            'cleaned_data': None
-        },
-        'adress_update': {
-            'is_valid': adress_setform.is_valid(),
-            'errors': {form.prefix: form.errors.as_json() for form in adress_setform},
-            'cleaned_data': None
-        },
-        'avatar_update': {
-            'is_valid': avatar_form.is_valid(),
-            'errors': avatar_form.errors.as_json(),
-            'cleaned_data': None
-        },
-    }
-    print(user_update_form.errors)
-    print(profile_update_form.errors)
-    print(adress_setform.errors)
-    print(avatar_form.errors)
-    print(request.user.profile.telephone)
-    print('User profile:', request.user.profile)
-    print('POST data:', request.POST)
-    print('FILES data:', request.FILES)
-
-    return JsonResponse(forms_data)
->>>>>>> 2a39d4d37298bf16ef5fe7f6d170a5b1e09b5e37
 
 
 @login_required

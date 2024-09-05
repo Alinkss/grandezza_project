@@ -23,7 +23,7 @@
           </button>
           <p class="message">Already registered? <a href="#">Sign In</a></p>
         </form>
-        <form class="login-form" method="post" action="{% url 'login' %}">
+        <form class="login-form" method="POST" action="{% url 'login_jwt' %}">
           {% csrf_token %}
           <h2></i> Login</h2>
           <input type="text" placeholder="Username" name="username" required />

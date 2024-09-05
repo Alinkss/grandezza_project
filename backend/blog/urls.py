@@ -1,8 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import MyLogoutView
-# from django.contrib import admin
+# from .views import MyLogoutView
 
 urlpatterns = [
     path('blog_main', views.blog_main, name= 'blog_main'),
@@ -11,7 +10,7 @@ urlpatterns = [
     path('blog_categories/<int:categ_id>/', views.blog_categories, name='blog_categories'),
     path('post/<int:post_id>/', views.post, name='post'),
     path('login', LoginView.as_view(), name='login'),
-    path('logout', MyLogoutView.as_view(), name='logout'),
+    path('logout', views.logout_jwt, name='logout'),
     path('registration', views.registration, name='registration'),
     path('profile/<int:user_id>/', views.profile, name='profile'),
     path('/<int:post_id>/<int:comment_id>', views.comment_delete, name='comment_delete'),
@@ -19,4 +18,5 @@ urlpatterns = [
     path('update_profile', views.update_profile, name='update_profile'),
     path('comment_button/<int:post_id>/', views.comment_button, name='comment_button'),
     path('my_view', views.my_view, name='my_view'),
+    path('login_jwt', views.login_jwt, name='login_jwt')
 ]
