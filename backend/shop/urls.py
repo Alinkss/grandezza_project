@@ -16,5 +16,6 @@ urlpatterns = [
     path('contact_us', views.contact_us, name='contact_us'),
     path('for_pets/<int:prod_id>', views.for_pets, name='for_pets'),
     path('product', views.product, name='product'),
+    path('comments/<int:prod_id>', views.comments, name='comments')
     # path('products', views.products, name='products'),
 ]
