@@ -203,6 +203,7 @@ def product(request):
 
     return JsonResponse(context)
 
+
 def for_pets(request, prod_id):
     product = get_object_or_404(PetProd, id=prod_id)
     user_rating = None
@@ -221,7 +222,7 @@ def for_pets(request, prod_id):
             form_data = {
                 'rating': review.rating
             }
-            
+
     else:
         form = RatingForm()
 
@@ -255,6 +256,7 @@ def for_pets(request, prod_id):
     }
 
     return JsonResponse(context)
+
 
 def product_detail(request, id):
     pets = Pets.objects.filter(id=id, avaible=True).first()
@@ -325,40 +327,53 @@ def contact_us(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+
 def comments(request, prod_id):
     product = get_object_or_404(PetProd, id=prod_id)
-    comments = ProdComment.objects.filter(product=product).order_by('-published_date')
-    
+    comments = ProdComment.objects.filter(
+        product=product).order_by('-published_date')
+
     if request.method == 'POST':
         comments_form = CommentForm(request.POST)
         if comments_form.is_valid():
             comments = comments_form.save(commit=False)
-            comments.user = request.user
             comments.published_date = now()
             comments.product = product
             comments.save()
-            
+
             comments_data = {
                 'id': comments.id,
-                'user': comments.user.username,
+                'user': comments.user.id,
                 'published_date': comments.published_date,
                 'product': comments.product.id,
                 'text': comments.text
             }
-            
+
             return JsonResponse(comments_data)
         else:
             errors = {
                 'errors': comments_form.errors.as_json()
             }
             return JsonResponse(errors)
-        
+
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def get_product_comments(request, prod_id):
+    product = get_object_or_404(PetProd, id=prod_id)
+    comments = ProdComment.objects.filter(
+        product=product).order_by('-published_date')
+
+    context = {
+        'comments': list(comments.values()),
+    }
+
+    return JsonResponse(context)
 
 # def comments(request, prod_id):
 #     product = get_object_or_404(PetProd, id=prod_id)
 #     comments = ProdComment.objects.filter(product=product).order_by('-published_date')
-    
+
 #     if request.method == 'POST':
 #         comments_form = CommentForm(request.POST)
 #         if comments_form.is_valid():
@@ -366,16 +381,15 @@ def comments(request, prod_id):
 #             comments.user = request.user
 #             comments.published_date = now()
 #             comments.product = product
-    
+
 #             return redirect('comments', prod_id=prod_id)
 #     else:
 #         comments_form = CommentForm()
-    
+
 #     context = {
 #         'comments': comments,
 #         'product': product,
 #         'comments_form': comments_form
 #     }
-        
-        
+
 #     return render(request, 'shop/product/for_pet.html', context)

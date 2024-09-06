@@ -6,7 +6,8 @@ class ContactUsForm(forms.ModelForm):
     class Meta:
         model = ContactUs
         fields = ['first_name', 'email', 'message',]
-        
+
+
 class RatingForm(forms.ModelForm):
     class Meta:
         model = ProductReview
@@ -14,7 +15,8 @@ class RatingForm(forms.ModelForm):
         widgets = {
             'rating': forms.RadioSelect(choices=[(i, f"{i} Stars") for i in range(1, 6)]),
         }
-    
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = ProdComment
