@@ -6,27 +6,39 @@ import { loginSchema as validationSchema } from '@/assets/validationSchemas';
 import axios from 'axios';
 import PasswordRequirementsHint from '@/components/forms/PasswordRequirementsHint';
 import ChangePasswordVisibilityButton from '@/components/forms/ChangePasswordVisibilityButton';
+import { useRouter } from 'next/navigation';
+import { storeJwtToken } from '@/app/store/storeUtils';
 
 const initialValues = {
 	email: '',
 	password: '',
 };
 
-const onSubmit = (
-	values: FormikValues,
-	{ setSubmitting }: FormikHelpers<typeof initialValues>
-) => {
-	setTimeout(async () => {
-		await axios.post(
-			process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/user/login',
-			values
-		);
-		setSubmitting(false);
-	}, 200);
-};
-
 export default function LoginForm() {
+	const router = useRouter();
 	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+
+	const onSubmit = (
+		value: FormikValues,
+		{ setSubmitting }: FormikHelpers<typeof initialValues>
+	) => {
+		setTimeout(async () => {
+			const loggingUser = new FormData();
+			loggingUser.append('username', value.email.split('@')[0]);
+			loggingUser.append('password', value.password);
+
+			const jwtToken = await axios
+				.post(
+					process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/bloglogin_jwt',
+					loggingUser
+				)
+				.then((res) => res.data.token);
+
+			storeJwtToken(jwtToken);
+			setSubmitting(false);
+			router.push('/');
+		}, 200);
+	};
 
 	const {
 		values,

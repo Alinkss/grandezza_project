@@ -8,6 +8,7 @@ import '/styles/footer.css';
 import '/styles/authorizingForm.css';
 import '/styles/contact.css';
 import Header from '@/components/Header/Header';
+import StoreInitializer from './store/StoreInitilizer';
 
 export const metadata: Metadata = {
 	title: 'Grandezza',
@@ -19,9 +20,17 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
+	//TODO:
+	//? make comments
+	//? hosting
+	//? make confirm purchase
+	//? make responsive design
+
 	return (
 		<html lang="en">
 			<body className="h-screen flex flex-col">
+				<div id="portal" className="fixed z-50" />
+				<StoreInitializer />
 				<Header />
 				{children}
 			</body>

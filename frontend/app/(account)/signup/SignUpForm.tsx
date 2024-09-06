@@ -7,6 +7,8 @@ import PasswordRequirementsHint from '@/components/forms/PasswordRequirementsHin
 import ChangePasswordVisibilityButton from '@/components/forms/ChangePasswordVisibilityButton';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from 'next/navigation';
+import { storeJwtToken } from '@/app/store/storeUtils';
 
 const initialValues = {
 	email: '',
@@ -15,31 +17,39 @@ const initialValues = {
 	lastName: '',
 };
 
-const onSubmit = (
-	values: typeof initialValues,
-	{ setSubmitting }: FormikHelpers<typeof initialValues>
-) => {
-	setTimeout(async () => {
-		const newUser = {
-			id: uuidv4(),
-			username: values.email.split('@')[0],
-			first_name: values.firstName,
-			last_name: values.firstName,
-			email: values.firstName,
-			password: values.password,
-			date_joined: new Date(),
-		};
-
-		await axios.post(
-			process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/blogregistration',
-			newUser
-		);
-		setSubmitting(false);
-	}, 200);
-};
-
 export default function SignUpForm() {
+	const router = useRouter();
 	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+
+	const onSubmit = (
+		value: typeof initialValues,
+		{ setSubmitting }: FormikHelpers<typeof initialValues>
+	) => {
+		setTimeout(async () => {
+			const newUser = new FormData();
+
+			newUser.append('id', uuidv4());
+			newUser.append('username', value.email.split('@')[0]);
+			newUser.append('first_name', value.firstName);
+			newUser.append('last_name', value.lastName);
+			newUser.append('email', value.email);
+			newUser.append('date_joined', new Date().toISOString());
+			newUser.append('telephone', '+380000000000');
+			newUser.append('password1', value.password);
+			newUser.append('password2', value.password);
+
+			const jwtToken = await axios
+				.post(
+					process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/blogregistration',
+					newUser
+				)
+				.then((res) => res.data.token);
+
+			storeJwtToken(jwtToken);
+			setSubmitting(false);
+			router.push('/');
+		}, 200);
+	};
 
 	const {
 		values,

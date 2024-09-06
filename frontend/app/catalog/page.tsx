@@ -1,17 +1,23 @@
-import Header from '@/components/Catalog/Header';
-import Catalog from '@/components/Catalog/Catalog';
-import { Assortment } from '@/types/catalog';
+import CatalogContent from './CatalogContent';
 import axios from 'axios';
+import { Assortment, Product } from '@/types/catalog';
 
 export default async function CatalogPage() {
+	if (!process.env.NEXT_PUBLIC_BASE_SERVER_URL) return <p>shit happens</p>;
+
 	const assortment: Assortment = await axios
 		.get(process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/catalog')
-		.then((res) => res.data);
+		.then((res) => {
+			res.data.products.map((product: Product) => {
+				return (product.images = product.image);
+			});
+
+			return res.data;
+		});
 
 	return (
 		<div className="flex-[2_1_auto] flex flex-col">
-			<Header />
-			<Catalog pets={assortment.pets} categories={assortment.categories} />
+			<CatalogContent assortment={assortment} />
 		</div>
 	);
 }
