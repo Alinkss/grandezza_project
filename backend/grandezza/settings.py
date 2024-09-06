@@ -28,7 +28,9 @@ SECRET_KEY = 'django-insecure-ijo%w)ig59uc#46xomaq5=#soe1$zl4uuzax&hopqg%*=hv3uf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'grandezza-project.onrender.com'
+]
 
 
 # Application definition
