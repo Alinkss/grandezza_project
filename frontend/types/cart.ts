@@ -1,3 +1,3 @@
-import { Pet } from './catalog';
+import { Pet, Product } from './catalog';
 
-export type Cart = Pet[];
+export type Cart = (Pet | Product)[];

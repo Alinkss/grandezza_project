@@ -1,4 +1,4 @@
-import { Pet } from '@/types/catalog';
+import { Pet, Product } from '@/types/catalog';
 import { store } from './store';
 
 export const getAndStoreUserSessionId = () => {
@@ -22,7 +22,7 @@ export const logOutUser = () => {
 	store.getState().setInitialValues();
 };
 
-export const addToCart = (product: Pet) => {
+export const addToCart = (product: Pet | Product) => {
 	const currentCart = store.getState().cart;
 	const newCart = [...currentCart!, product];
 

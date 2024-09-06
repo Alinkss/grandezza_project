@@ -20,13 +20,12 @@ export default function Catalog({ pets: assortmentPets, categories }: Props) {
 
 	useEffect(() => {
 		if (selectedCategoryId === 0) setPets(assortmentPets);
-		else {
-			const sortedPets = assortmentPets.filter(
-				(pet) => pet.category_id === selectedCategoryId
-			);
 
-			setPets(sortedPets);
-		}
+		const sortedPets = assortmentPets.filter(
+			(pet) => pet.category_id === selectedCategoryId
+		);
+
+		setPets(sortedPets);
 	}, [assortmentPets, selectedCategoryId]);
 
 	return (

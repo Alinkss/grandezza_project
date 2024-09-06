@@ -1,48 +1,46 @@
 import { LegacyRef, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { newCommentValidateSchema } from '@/assets/validationSchemas';
-import { CommentType } from '@/types/comment';
 import { Formik } from 'formik';
 import { store } from '@/app/store/store';
+import { CommentType } from '@/types/comment';
+import { useParams } from 'next/navigation';
 
 interface Props {
-	productComments: CommentType;
-	sendCommentToServer: (newCommentText: string) => Promise<void>;
+	comments: CommentType;
+	sendCommentToServer: (productId: string, text: string) => Promise<void>;
 }
 
 interface CommentFormProps {
-	sendCommentToServer: (newCommentText: string) => Promise<void>;
+	sendCommentToServer: (productId: string, text: string) => Promise<void>;
 }
 
-export default function Comments({
-	productComments,
-	sendCommentToServer,
-}: Props) {
+export default function Comments({ comments, sendCommentToServer }: Props) {
 	return (
 		<>
 			<div className="col-span-2 row-span-2">
 				<div className="p-4 flex flex-col gap-4">
-					{productComments.length ? (
-						productComments.map((comment, index) => {
+					{comments.length ? (
+						comments.map((comment, index) => {
 							return (
 								<div className="bg-white rounded-lg shadow-lg" key={index}>
 									<div className="p-4 col-span-2 row-span-2">
 										<div className="flex items-center mb-2">
 											<div className="w-10 h-10 mr-4">
 												<Image
-													className="rounded"
-													src={comment.picture}
+													className="rounded min-w-[50px] h-[48px]"
+													src="https://img.icons8.com/ios-glyphs/100/guest-male.png"
 													alt="#"
-													width={48}
-													height={48}
+													width={100}
+													height={100}
 												/>
 											</div>
 											<div>
 												<h2 className="text-lg font-medium text-gray-900">
-													{comment.author}
+													{comment.username}
 												</h2>
 												<p className="text-sm text-gray-500">
-													{new Date(comment.date).toLocaleString()}
+													{new Date(comment.published_date).toLocaleString()}
 												</p>
 											</div>
 										</div>
@@ -68,6 +66,8 @@ export default function Comments({
 }
 
 function CommentForm({ sendCommentToServer }: CommentFormProps) {
+	const { productId }: { productId: string } = useParams();
+
 	const isUserAuthorized = !!store.getState().user?.sessionId;
 	const inputNewCommentRef = useRef<HTMLTextAreaElement>();
 	const sendNewCommentButtonRef = useRef<HTMLButtonElement>();
@@ -104,7 +104,7 @@ function CommentForm({ sendCommentToServer }: CommentFormProps) {
 			validationSchema={newCommentValidateSchema}
 			onSubmit={(values, { setSubmitting, resetForm }) => {
 				setTimeout(async () => {
-					await sendCommentToServer(values.newCommentText);
+					await sendCommentToServer(productId, values.newCommentText);
 
 					resetForm();
 					removeFocusFromNewCommentInput();

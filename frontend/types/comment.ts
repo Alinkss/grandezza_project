@@ -1,9 +1,10 @@
 export interface IComment {
-	author: string;
-	date: number;
-	picture: string;
+	id: number;
 	text: string;
-	uniqueCommentId: string;
+	product_id: number;
+	published_date: string;
+	user_id: number;
+	username?: string;
 }
 
 export type CommentType = IComment[];

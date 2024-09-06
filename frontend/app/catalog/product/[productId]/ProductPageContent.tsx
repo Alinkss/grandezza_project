@@ -7,25 +7,38 @@ import Details from '@/components/PetPage/Details';
 import { useEffect, useState } from 'react';
 import { ShowSuccessNotification } from '@/components/PetPage/ShowSuccessNotification';
 import { addToCart } from '@/app/store/storeUtils';
+import Comments from '@/components/PetPage/Comments';
 import { Product } from '@/types/catalog';
 import { CommentType } from '@/types/comment';
-import Comments from '@/components/PetPage/Comments';
+import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 interface Props {
 	product: Product;
+	comments: CommentType;
 }
 
-export default function ProductPageContent({ product }: Props) {
+export default function ProductPageContent({ product, comments }: Props) {
 	const [isOpenSuccessWindow, setIsOpenSuccessWindow] =
 		useState<boolean>(false);
-	const productComments: CommentType = [];
 
 	const handleClickBuyButton = () => {
 		addToCart(product);
 		setIsOpenSuccessWindow(true);
 	};
 
-	const sendCommentToServer = async () => {};
+	const sendCommentToServer = async (productId: string, text: string) => {
+		const newComment = new FormData();
+		newComment.append('id', uuidv4());
+		newComment.append('text', text);
+
+		await axios
+			.post(
+				process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/comments/' + productId,
+				newComment
+			)
+			.then((res) => console.log(res.data));
+	};
 
 	useEffect(() => {
 		if (!isOpenSuccessWindow) return;
@@ -49,12 +62,12 @@ export default function ProductPageContent({ product }: Props) {
 					<Title title={product.name} />
 					<Option
 						productPrice={parseInt(product.price)}
-						commentsAmount={productComments.length}
+						commentsAmount={comments.length}
 						handleClickBuyButton={handleClickBuyButton}
 					/>
 					<Details productDescription={product.description} />
 					<Comments
-						productComments={productComments}
+						comments={comments}
 						sendCommentToServer={sendCommentToServer}
 					/>
 				</div>

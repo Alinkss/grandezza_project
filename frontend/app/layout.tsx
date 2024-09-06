@@ -21,9 +21,10 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	//TODO:
+	//? make comments
+	//? hosting
 	//? make confirm purchase
 	//? make responsive design
-	//? make comments
 
 	return (
 		<html lang="en">
