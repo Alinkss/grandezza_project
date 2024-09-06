@@ -11,6 +11,7 @@ interface Props {
 export default function CatalogContent({ assortment }: Props) {
 	const [searchedPetName, setSearchedPetName] = useState<string>('');
 	const [pets, setPets] = useState(assortment.pets);
+	const [products, setProducts] = useState(assortment.products);
 
 	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchedPetName(event.target.value);
@@ -26,10 +27,24 @@ export default function CatalogContent({ assortment }: Props) {
 		setPets(filteredPets);
 	}, [searchedPetName]);
 
+	useEffect(() => {
+		if (!searchedPetName) setProducts(assortment.products);
+
+		const filteredProducts = assortment.products.filter((product) =>
+			product.name.toLowerCase().startsWith(searchedPetName.toLowerCase())
+		);
+
+		setProducts(filteredProducts);
+	}, [searchedPetName]);
+
 	return (
 		<>
 			<Header searchProps={{ searchedPetName, handleSearchChange }} />
-			<Catalog pets={pets} categories={assortment.categories} />
+			<Catalog
+				pets={pets}
+				products={products}
+				categories={assortment.categories}
+			/>
 		</>
 	);
 }

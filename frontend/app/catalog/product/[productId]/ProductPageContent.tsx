@@ -12,6 +12,7 @@ import { Product } from '@/types/catalog';
 import { CommentType } from '@/types/comment';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+import { store } from '@/app/store/store';
 
 interface Props {
 	product: Product;
@@ -19,6 +20,8 @@ interface Props {
 }
 
 export default function ProductPageContent({ product, comments }: Props) {
+	const token = store.getState().user?.sessionId;
+
 	const [isOpenSuccessWindow, setIsOpenSuccessWindow] =
 		useState<boolean>(false);
 
@@ -28,8 +31,19 @@ export default function ProductPageContent({ product, comments }: Props) {
 	};
 
 	const sendCommentToServer = async (productId: string, text: string) => {
+		const jwtTokenForm = new FormData();
+		jwtTokenForm.append('token', token!);
+
+		const userId = await axios
+			.post(
+				process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/blogget_user_by_jwt',
+				jwtTokenForm
+			)
+			.then((res) => res.data.user_id);
+
 		const newComment = new FormData();
 		newComment.append('id', uuidv4());
+		newComment.append('user_id', userId);
 		newComment.append('text', text);
 
 		await axios

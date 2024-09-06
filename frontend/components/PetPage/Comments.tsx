@@ -4,7 +4,7 @@ import { newCommentValidateSchema } from '@/assets/validationSchemas';
 import { Formik } from 'formik';
 import { store } from '@/app/store/store';
 import { CommentType } from '@/types/comment';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 interface Props {
 	comments: CommentType;
@@ -66,6 +66,7 @@ export default function Comments({ comments, sendCommentToServer }: Props) {
 }
 
 function CommentForm({ sendCommentToServer }: CommentFormProps) {
+	const router = useRouter();
 	const { productId }: { productId: string } = useParams();
 
 	const isUserAuthorized = !!store.getState().user?.sessionId;
@@ -109,6 +110,7 @@ function CommentForm({ sendCommentToServer }: CommentFormProps) {
 					resetForm();
 					removeFocusFromNewCommentInput();
 					setSubmitting(false);
+					router.refresh();
 				}, 400);
 			}}>
 			{({

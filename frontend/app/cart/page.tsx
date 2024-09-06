@@ -2,16 +2,29 @@
 import ManageButtons from '@/components/Cart/ManageButtons';
 import ProductList from '@/components/Cart/ProductList';
 import { store } from '../store/store';
-import Error from 'next/error';
+import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
+	const router = useRouter();
+
+	const handleLogInButtonClick = () => {
+		router.push('/login');
+	};
+
 	const isUserAuthorized = !!store.getState().user?.sessionId;
 	if (!isUserAuthorized) {
-		// throw new Error({
-		// 	title: 'You cannot use a cart without being authorized',
-		// 	statusCode: 401,
-		// });
-		console.log('You cannot use a cart without being authorized');
+		return (
+			<div className="flex-[2_1_auto] flex flex-col justify-center items-center gap-10">
+				<p className="font-semibold text-4xl text-red-600">
+					You cannot use a cart without being authorized
+				</p>
+				<button
+					className="flex w-fit items-center justify-center rounded-md border border-transparent px-3 py-2 text-lg font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none"
+					onClick={handleLogInButtonClick}>
+					Log In
+				</button>
+			</div>
+		);
 	}
 
 	return (
