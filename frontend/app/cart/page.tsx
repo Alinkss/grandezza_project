@@ -7,10 +7,11 @@ import Error from 'next/error';
 export default function CartPage() {
 	const isUserAuthorized = !!store.getState().user?.sessionId;
 	if (!isUserAuthorized) {
-		throw new Error({
-			title: 'You cannot use a cart without being authorized',
-			statusCode: 401,
-		});
+		// throw new Error({
+		// 	title: 'You cannot use a cart without being authorized',
+		// 	statusCode: 401,
+		// });
+		console.log('You cannot use a cart without being authorized');
 	}
 
 	return (

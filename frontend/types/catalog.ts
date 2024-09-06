@@ -35,4 +35,5 @@ export type Product = {
 	price: string;
 	description: string;
 	image: string;
+	images?: string;
 };

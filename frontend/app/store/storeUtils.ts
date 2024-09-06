@@ -2,27 +2,37 @@ import { Pet, Product } from '@/types/catalog';
 import { store } from './store';
 
 export const getAndStoreUserSessionId = () => {
+	if (typeof window === 'undefined' || !window.localStorage) return;
+
 	const sessionId = localStorage.getItem('sessionId');
 	store.setState({ user: { sessionId } });
 };
 
 export const storeJwtToken = (token: string) => {
+	if (typeof window === 'undefined' || !window.localStorage) return;
+
 	localStorage.setItem('sessionId', token);
 	store.setState({ user: { sessionId: token } });
 };
 
 export const getAndStoreCart = () => {
+	if (typeof window === 'undefined' || !window.localStorage) return;
+
 	const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 	store.setState({ cart });
 };
 
 export const logOutUser = () => {
+	if (typeof window === 'undefined' || !window.localStorage) return;
+
 	localStorage.removeItem('sessionId');
 	localStorage.removeItem('cart');
 	store.getState().setInitialValues();
 };
 
 export const addToCart = (product: Pet | Product) => {
+	if (typeof window === 'undefined' || !window.localStorage) return;
+
 	const currentCart = store.getState().cart;
 	const newCart = [...currentCart!, product];
 
@@ -31,6 +41,8 @@ export const addToCart = (product: Pet | Product) => {
 };
 
 export const removeFromCart = (id: number) => {
+	if (typeof window === 'undefined' || !window.localStorage) return;
+
 	const cart = store.getState().cart;
 	const indexForRemoving = cart?.findIndex((pet) => pet.id === id);
 
@@ -43,6 +55,8 @@ export const removeFromCart = (id: number) => {
 };
 
 export const clearCart = () => {
+	if (typeof window === 'undefined' || !window.localStorage) return;
+
 	localStorage.setItem('cart', '[]');
 	store.setState({ cart: [] });
 };

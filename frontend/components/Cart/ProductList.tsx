@@ -24,12 +24,12 @@ export default function ProductList() {
 
 	return (
 		<div className="flex flex-col gap-4">
-			{cart.map((pet, index) => (
+			{cart.map((product, index) => (
 				<div key={index}>
 					<div className="flex flex-row justify-between">
 						<div className="flex flex-row gap-6">
 							<Image
-								src={'/' + pet.images}
+								src={'/' + product.images}
 								alt="#"
 								className="w-[120px] h-[100px]"
 								width={200}
@@ -37,14 +37,14 @@ export default function ProductList() {
 							/>
 							<div className="flex flex-col justify-center">
 								<Link
-									href={'/catalog/' + pet.id}
+									href={'/catalog/' + product.id}
 									className="text-lg font-bold hover:underline">
-									{pet.name}
+									{product.name}
 								</Link>
-								<p>${parseInt(pet.price)}</p>
+								<p>${parseInt(product.price)}</p>
 							</div>
 						</div>
-						<button onClick={() => handleRemovePetFromCart(pet.id)}>
+						<button onClick={() => handleRemovePetFromCart(product.id)}>
 							<Image
 								src="https://img.icons8.com/glyph-neue/64/trash.png"
 								alt="#"
