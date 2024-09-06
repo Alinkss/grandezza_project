@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Assortment, Product } from '@/types/catalog';
 
 export default async function CatalogPage() {
+	if (!process.env.NEXT_PUBLIC_BASE_SERVER_URL) return <p>shit happens</p>;
+
 	const assortment: Assortment = await axios
 		.get(process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/catalog')
 		.then((res) => {

@@ -10,6 +10,8 @@ interface Props {
 }
 
 export default async function ProductPage({ params: { productId } }: Props) {
+    if (!process.env.NEXT_PUBLIC_BASE_SERVER_URL) return <p>shit happens</p>;
+
 	const product = await axios
 		.get(process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/product')
 		.then((res) =>

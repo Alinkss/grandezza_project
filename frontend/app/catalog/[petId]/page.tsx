@@ -8,6 +8,8 @@ interface Props {
 }
 
 export default async function PetPage({ params: { petId } }: Props) {
+	if (!process.env.NEXT_PUBLIC_BASE_SERVER_URL) return <p>shit happens</p>;
+
 	const pet = await axios
 		.get(process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/product_detail/' + petId)
 		.then((res) => {
