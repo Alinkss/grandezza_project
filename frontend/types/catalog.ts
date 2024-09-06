@@ -10,6 +10,7 @@ export type Pet = {
 	name: string;
 	price: string;
 	description: string;
+	image: null;
 	images: string;
 	category_id: number;
 	avaible: boolean;
@@ -28,6 +29,7 @@ export type Category = {
 
 export type Product = {
 	id: number;
+	type?: null;
 	category_id: number;
 	name: string;
 	avaible: boolean;

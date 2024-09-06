@@ -1,5 +1,5 @@
 import { Category } from '@/types/catalog';
-import { Fragment } from 'react';
+import { Fragment, useRef } from 'react';
 
 interface Props {
 	catagories: Category[];

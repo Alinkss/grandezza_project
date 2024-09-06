@@ -8,11 +8,19 @@ export default async function CatalogPage() {
 	const assortment: Assortment = await axios
 		.get(process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/catalog')
 		.then((res) => {
-			res.data.products.map((product: Product) => {
-				return (product.images = product.image);
+			res.data.categories.unshift({ id: 0, name: 'All' });
+			return res.data;
+		})
+		.then((data) => {
+			data.products.map((product: Product) => {
+				product.category_id = 4;
+				product.images = product.image;
+
+				return product;
 			});
 
-			return res.data;
+			data.categories.push({ id: 4, name: 'Products for pets' });
+			return data;
 		});
 
 	return (

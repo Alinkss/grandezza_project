@@ -3,12 +3,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { PaginationBar } from './PaginationBar';
 import { paginate } from '@/assets/paginate';
-import { Category, Pet } from '@/types/catalog';
+import { Category, Pet, Product } from '@/types/catalog';
 import { addToCart } from '@/app/store/storeUtils';
 import { ShowSuccessNotification } from '../PetPage/ShowSuccessNotification';
 
 interface Props {
-	pets: Pet[];
+	pets: (Pet | Product)[];
 	catagories: Category[];
 }
 
@@ -24,7 +24,7 @@ export default function PetsList({ pets, catagories }: Props) {
 		setCurrentPage(page);
 	};
 
-	const addPetToCart = (pet: Pet) => {
+	const addPetToCart = (pet: Pet | Product) => {
 		addToCart(pet);
 		setIsOpenSuccessWindow(true);
 	};
@@ -66,7 +66,13 @@ export default function PetsList({ pets, catagories }: Props) {
 							</div>
 							<div>
 								<p className="text-lg font-semibold">
-									<Link href={'/catalog/' + pet.id} className="hover:underline">
+									<Link
+										href={
+											pet.type
+												? '/catalog/' + pet.id
+												: '/catalog/product/' + pet.id
+										}
+										className="hover:underline">
 										{pet.name}
 									</Link>
 								</p>

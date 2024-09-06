@@ -29,7 +29,7 @@ export default function ProductList() {
 					<div className="flex flex-row justify-between">
 						<div className="flex flex-row gap-6">
 							<Image
-								src={'/' + product.images}
+								src={product.image ? '/' + product.image : '/' + product.images}
 								alt="#"
 								className="w-[120px] h-[100px]"
 								width={200}
@@ -37,7 +37,11 @@ export default function ProductList() {
 							/>
 							<div className="flex flex-col justify-center">
 								<Link
-									href={'/catalog/' + product.id}
+									href={
+										product.type
+											? '/catalog/' + product.id
+											: '/catalog/product/' + product.id
+									}
 									className="text-lg font-bold hover:underline">
 									{product.name}
 								</Link>

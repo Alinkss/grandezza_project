@@ -24,7 +24,6 @@ export default function RootLayout({
 	//? make comments
 	//? hosting
 	//? make confirm purchase
-	//? make responsive design
 
 	return (
 		<html lang="en">

@@ -1,7 +1,7 @@
-import { Pet } from '@/types/catalog';
+import { Pet, Product } from '@/types/catalog';
 
 export const paginate = (
-	products: Pet[],
+	products: (Pet | Product)[],
 	pageAmount: number,
 	showingProductAmount: number
 ) => {
