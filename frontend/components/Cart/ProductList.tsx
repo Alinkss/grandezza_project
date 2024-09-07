@@ -1,9 +1,9 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { store } from '@/app/store/store';
 import { removeFromCart } from '@/app/store/storeUtils';
-import { useRouter } from 'next/navigation';
 
 export default function ProductList() {
 	const router = useRouter();
@@ -48,7 +48,7 @@ export default function ProductList() {
 								<p>${parseInt(product.price)}</p>
 							</div>
 						</div>
-						<button onClick={() => handleRemovePetFromCart(product.id)}>
+						<button onClick={() => handleRemovePetFromCart(index)}>
 							<Image
 								src="https://img.icons8.com/glyph-neue/64/trash.png"
 								alt="#"

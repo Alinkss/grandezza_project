@@ -29,7 +29,8 @@ SECRET_KEY = 'django-insecure-ijo%w)ig59uc#46xomaq5=#soe1$zl4uuzax&hopqg%*=hv3uf
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'grandezza-project.onrender.com'
+    '127.0.0.1',
+    'grandezza-project.onrender.com',
 ]
 
 
@@ -55,7 +56,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -66,7 +66,6 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
 ]
-
 CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'grandezza.urls'
@@ -171,4 +170,4 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 JWT_SECRET_KEY = config('JWT_SECRET_KEY')
 JWT_ALGORITHM = 'HS256'
-JWT_EXPIRATION_DELTA = datetime.timedelta(minutes=30)
+JWT_EXPIRATION_DELTA = datetime.timedelta(minutes=60)

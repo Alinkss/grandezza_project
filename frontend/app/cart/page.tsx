@@ -11,8 +11,7 @@ export default function CartPage() {
 		router.push('/login');
 	};
 
-	const isUserAuthorized = !!store.getState().user?.sessionId;
-	if (!isUserAuthorized) {
+	if (!store.getState().user?.sessionId) {
 		return (
 			<div className="flex-[2_1_auto] flex flex-col justify-center items-center gap-10">
 				<p className="font-semibold text-4xl text-red-600">

@@ -4,6 +4,7 @@ import { getAndStoreCart, getAndStoreUserSessionId } from './storeUtils';
 
 const StoreInitializer = () => {
 	const initialized = useRef(false);
+
 	if (!initialized.current) {
 		getAndStoreUserSessionId();
 		getAndStoreCart();
