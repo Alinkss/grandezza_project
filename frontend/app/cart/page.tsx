@@ -1,30 +1,11 @@
 'use client';
 import ManageButtons from '@/components/Cart/ManageButtons';
 import ProductList from '@/components/Cart/ProductList';
+import UserIsNotAuthorized from './UserIsNotAuthorized';
 import { store } from '../store/store';
-import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
-	const router = useRouter();
-
-	const handleLogInButtonClick = () => {
-		router.push('/login');
-	};
-
-	if (!store.getState().user?.sessionId) {
-		return (
-			<div className="flex-[2_1_auto] flex flex-col justify-center items-center gap-10">
-				<p className="font-semibold text-4xl text-red-600">
-					You cannot use a cart without being authorized
-				</p>
-				<button
-					className="flex w-fit items-center justify-center rounded-md border border-transparent px-3 py-2 text-lg font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none"
-					onClick={handleLogInButtonClick}>
-					Log In
-				</button>
-			</div>
-		);
-	}
+	if (!store.getState().user?.sessionId) return <UserIsNotAuthorized />;
 
 	return (
 		<div className="flex-[2_1_auto] flex flex-col gap-12 justify-center items-center pb-8">
