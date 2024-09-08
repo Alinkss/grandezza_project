@@ -170,4 +170,4 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 JWT_SECRET_KEY = config('JWT_SECRET_KEY')
 JWT_ALGORITHM = 'HS256'
-JWT_EXPIRATION_DELTA = datetime.timedelta(minutes=60)
+JWT_EXPIRATION_DELTA = datetime.timedelta()

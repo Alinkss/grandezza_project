@@ -37,6 +37,7 @@ export default function LoginForm() {
 			storeJwtToken(jwtToken);
 			setSubmitting(false);
 			router.push('/');
+			router.refresh();
 		}, 200);
 	};
 
