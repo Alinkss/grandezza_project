@@ -36,7 +36,7 @@ export default function ProductPageContent({ product, comments }: Props) {
 
 		const userId = await axios
 			.post(
-				process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/blogget_user_by_jwt',
+				process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/blog/get_user_by_jwt',
 				jwtTokenForm
 			)
 			.then((res) => res.data.user_id);
@@ -49,7 +49,12 @@ export default function ProductPageContent({ product, comments }: Props) {
 		await axios
 			.post(
 				process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/comments/' + productId,
-				newComment
+				newComment,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
 			)
 			.then((res) => console.log(res.data));
 	};
