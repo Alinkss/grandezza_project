@@ -48,6 +48,7 @@ export default function SignUpForm() {
 			storeJwtToken(jwtToken);
 			setSubmitting(false);
 			router.push('/');
+			router.refresh();
 		}, 200);
 	};
 

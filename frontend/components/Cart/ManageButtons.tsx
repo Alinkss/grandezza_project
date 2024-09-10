@@ -32,10 +32,6 @@ export default function ManageButtons() {
 		setIsConfirmPurchaseModal(false);
 	};
 
-	useEffect(() => {
-		setIsConfirmPurchaseModal(true);
-	}, []);
-
 	return (
 		<>
 			{isConfirmPurchaseModal && (

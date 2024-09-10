@@ -1,6 +1,11 @@
-import { paymentMethods } from '@/assets/paymentMethods';
+import { LegacyRef, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
+import { clearCart } from '@/app/store/storeUtils';
+import { confetti } from '@tsparticles/confetti';
+import { paymentMethods } from '@/assets/paymentMethods';
 import { Formik } from 'formik';
+import { store } from '@/app/store/store';
 
 interface Props {
 	handleCloseConfirmPurchaseModal: () => void;
@@ -9,6 +14,15 @@ interface Props {
 export default function ConfirmPurchaseModal({
 	handleCloseConfirmPurchaseModal,
 }: Props) {
+	const submitButtonRef = useRef<HTMLButtonElement>();
+	const router = useRouter();
+
+	const cart = store.getState().cart;
+	const totalPrice = cart?.reduce(
+		(partialSum, pet) => partialSum + parseInt(pet.price),
+		0
+	);
+
 	return (
 		<div className="w-screen h-screen bg-gray-600/80 flex justify-center items-center text-white">
 			<div className="bg-gray-700 rounded-xl p-10 flex flex-col gap-4">
@@ -29,9 +43,25 @@ export default function ConfirmPurchaseModal({
 							postalCode: '',
 							paymentMethod: '',
 						}}
-						validationSchema={null}
-						onSubmit={(values, { setSubmitting }) => {
-							console.log('start anim');
+						onSubmit={async (values, { setSubmitting }) => {
+							if (submitButtonRef.current) {
+								submitButtonRef.current.style.opacity = '0';
+								submitButtonRef.current.style.cursor = 'auto';
+							}
+
+							await confetti('portal', {
+								particleCount: 80,
+								spread: 140,
+								startVelocity: 60,
+								gravity: 0.5,
+								scalar: 1.5,
+								ticks: 200,
+							});
+
+							setTimeout(() => {
+								clearCart();
+								router.push('/');
+							}, 3000);
 						}}>
 						{({
 							values,
@@ -135,7 +165,11 @@ export default function ConfirmPurchaseModal({
 											<div className="m-auto w-[95%] h-[2px] bg-gray-500" />
 										</div>
 									</div>
+									<p className="text-right text-lg">
+										Total price: <b>${totalPrice}</b>
+									</p>
 									<button
+										ref={submitButtonRef as LegacyRef<HTMLButtonElement>}
 										className="mt-2 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
 										type="submit"
 										disabled={isSubmitting}>
