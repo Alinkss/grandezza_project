@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ijo%w)ig59uc#46xomaq5=#soe1$zl4uuzax&hopqg%*=hv3uf'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,12 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'shop',
     'blog',
     'cart',
     'orders',
     'django_extensions',
+    'corsheaders',
     # 'corsheaders',
 ]
 
@@ -60,12 +60,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    # 'path.to.JWTAuthenticationMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
+    'http://localhost:3000'
 ]
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'grandezza.urls'
@@ -170,4 +172,4 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 JWT_SECRET_KEY = config('JWT_SECRET_KEY')
 JWT_ALGORITHM = 'HS256'
-JWT_EXPIRATION_DELTA = datetime.timedelta(minutes=60)
+JWT_EXPIRATION_DELTA = datetime.timedelta(days=7)
