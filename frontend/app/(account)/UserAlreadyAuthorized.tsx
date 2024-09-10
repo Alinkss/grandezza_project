@@ -11,7 +11,7 @@ export default function UserAlreadyAuthorized() {
 
 	return (
 		<div className="flex-[2_1_auto] flex flex-col justify-center items-center gap-8">
-			<p className="font-semibold text-4xl text-red-600">
+			<p className="font-semibold text-4xl text-red-600 max-sm:text-center">
 				You have already authorized
 			</p>
 			<button

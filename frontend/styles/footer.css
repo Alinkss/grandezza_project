@@ -2,7 +2,7 @@
 @tailwind components;
 
 .footer-cell-wrapper {
-	@apply w-[33%] flex flex-row items-center gap-4 m-auto;
+	@apply sm:w-[33%] flex flex-row items-center gap-4 sm:m-auto max-sm:mx-[15%];
 }
 
 .footer-icon-wrapper {

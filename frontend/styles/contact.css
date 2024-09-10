@@ -2,7 +2,7 @@
 @tailwind components;
 
 .contact-info {
-	@apply flex flex-row gap-6;
+	@apply flex flex-row gap-6 max-sm:w-full;
 }
 
 .contact-text-wrapper {
@@ -10,5 +10,5 @@
 }
 
 .contact-icon-wrapper {
-	@apply flex flex-col justify-center items-center min-w-[40px];
+	@apply flex flex-col justify-center items-center min-w-[40px] max-sm:items-center;
 }

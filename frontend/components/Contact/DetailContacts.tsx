@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function DetailContacts() {
 	return (
-		<div className="w-[40%] my-auto flex flex-col gap-8">
+		<div className="w-[40%] my-auto flex flex-col gap-8 max-sm:w-full max-sm:items-center max-sm:my-0">
 			<div className="contact-info">
 				<div className="contact-icon-wrapper">
 					<Image

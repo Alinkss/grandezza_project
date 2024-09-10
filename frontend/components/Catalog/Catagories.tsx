@@ -1,5 +1,8 @@
+'use client';
+import { Fragment } from 'react';
+import { Accordion, AccordionItem } from '@nextui-org/react';
+import useIsMobileDevice from '@/hooks/useIsMobileDevice';
 import { Category } from '@/types/catalog';
-import { Fragment, useRef } from 'react';
 
 interface Props {
 	catagories: Category[];
@@ -13,26 +16,30 @@ export default function Catagories({
 	selectCategory,
 }: Props) {
 	return (
-		<div className="w-[20%] bg-gray-200 h-fit p-4 py-6">
-			<div className="mb-6">
-				<p className="font-semibold text-2xl mb-2">Categories</p>
-				<Separator />
-			</div>
-			<div className="flex flex-col items-start gap-2">
-				{catagories.map((category, index) => (
-					<Fragment key={index}>
-						<button
-							onClick={() => selectCategory(category.id)}
-							className={
-								'text-lg ' +
-								(category.id === selectedCategoryId && 'font-semibold')
-							}>
-							{category.name}
-						</button>
-						<Separator />
-					</Fragment>
-				))}
-			</div>
+		<div className="w-[20%] bg-gray-200 h-fit p-4 py-6 max-sm:w-full">
+			<Accordion defaultExpandedKeys={useIsMobileDevice() ? ['1'] : ['2']}>
+				<AccordionItem
+					key="1"
+					title="Categories"
+					aria-label="Accordion Categories"
+					className="font-semibold text-lg">
+					<div className="flex flex-col items-start gap-2">
+						{catagories.map((category, index) => (
+							<Fragment key={index}>
+								<button
+									onClick={() => selectCategory(category.id)}
+									className={
+										'text-lg ' +
+										(category.id === selectedCategoryId && 'font-semibold')
+									}>
+									{category.name}
+								</button>
+								{index === catagories.length - 1 || <Separator />}
+							</Fragment>
+						))}
+					</div>
+				</AccordionItem>
+			</Accordion>
 		</div>
 	);
 }

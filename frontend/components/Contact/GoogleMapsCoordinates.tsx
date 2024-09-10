@@ -9,7 +9,7 @@ export default function GoogleMapsCoordinates() {
 	});
 
 	return (
-		<div className="w-[60%]">
+		<div className="w-[60%] max-sm:w-full max-sm:min-h-[300px]">
 			<APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_CLOUD_SERVICE_API!}>
 				<Map
 					defaultZoom={17}

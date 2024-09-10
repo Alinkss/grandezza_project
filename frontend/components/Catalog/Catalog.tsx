@@ -43,7 +43,7 @@ export default function Catalog({
 	}, [assortmentPets, selectedCategoryId]);
 
 	return (
-		<div className="flex flex-row">
+		<div className="flex flex-row max-sm:flex-col">
 			<Catagories
 				catagories={categories}
 				selectedCategoryId={selectedCategoryId}
