@@ -39,8 +39,10 @@ export default function PetsList({ pets, catagories }: Props) {
 
 	if (!petsForDisplay.length)
 		return (
-			<div className="w-[75%] flex justify-center items-center">
-				<p className="text-xl">No pets match your search parameters</p>
+			<div className="w-[75%] flex justify-center items-center max-sm:w-full">
+				<p className="text-xl max-sm:text-center max-sm:p-8">
+					No pets match your search parameters
+				</p>
 			</div>
 		);
 
@@ -49,8 +51,8 @@ export default function PetsList({ pets, catagories }: Props) {
 			{isOpenSuccessWindow && (
 				<ShowSuccessNotification successText="You have successfully added this item to your cart" />
 			)}
-			<div className="w-[75%] p-12 flex flex-col gap-8">
-				<div className="grid grid-cols-3 gap-12">
+			<div className="w-[75%] p-12 flex flex-col gap-8 max-sm:w-full max-sm:p-10">
+				<div className="grid grid-cols-3 gap-12 max-sm:grid-cols-1">
 					{petsForDisplay.map((pet, index) => (
 						<div
 							className="p-4 px-6 rounded-xl text-center bg-gray-300 flex flex-col gap-4"

@@ -21,7 +21,7 @@ const onSubmit = (
 export default function Contact() {
 	return (
 		<div className="bg-[#800080] w-full p-12 flex flex-col gap-8">
-			<div className="w-fit relative left-[25%] text-white">
+			<div className="w-fit relative sm:left-[25%] text-white max-sm:text-center max-sm:mx-auto">
 				<i>Say Hello</i>
 				<p className="text-3xl font-semibold">Contact</p>
 			</div>

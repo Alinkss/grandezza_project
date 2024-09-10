@@ -9,9 +9,9 @@ export default function CartPage() {
 
 	return (
 		<div className="flex-[2_1_auto] flex flex-col gap-12 justify-center items-center pb-8">
-			<p className="text-2xl font-semibold">Cart</p>
+			<p className="text-2xl font-semibold max-sm:text-3xl">Cart</p>
 			<div className="flex flex-col items-center gap-12">
-				<div className="w-[150%]">
+				<div className="w-[150%] max-sm:w-screen max-sm:px-8">
 					<ProductList />
 				</div>
 				<ManageButtons />

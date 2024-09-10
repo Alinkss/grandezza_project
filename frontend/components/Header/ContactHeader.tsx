@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 export default function ContactHeader() {
 	return (
-		<div className="bg-[#f8f9fa] p-2 px-6 flex flex-row justify-between">
-			<div className="ml-10 flex flex-row gap-8">
+		<div className="bg-[#f8f9fa] p-2 px-6 flex flex-row max-sm:flex-col max-sm:gap-4 justify-between">
+			<div className="sm:ml-10 flex flex-row gap-8">
 				<div className="flex flex-row gap-1">
 					<img
 						src="https://img.icons8.com/ios-filled/100/0000ff/marker.png"
@@ -21,8 +21,8 @@ export default function ContactHeader() {
 					<p className="m-auto">Every time!</p>
 				</div>
 			</div>
-			<div className="flex flex-row gap-4">
-				<div className="flex flex-row gap-2">
+			<div className="flex flex-row max-sm:flex-col gap-4">
+				<div className="flex flex-row gap-2 max-sm:gap-0 max-sm:mx-auto">
 					<img
 						className="w-[20px] h-[20px] m-auto"
 						src="https://img.icons8.com/ios-glyphs/90/0000ff/phone--v1.png"

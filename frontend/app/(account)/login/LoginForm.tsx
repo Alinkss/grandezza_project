@@ -56,7 +56,9 @@ export default function LoginForm() {
 	});
 
 	return (
-		<form className="flex flex-col gap-8 w-1/4" onSubmit={handleSubmit}>
+		<form
+			className="flex flex-col gap-8 w-1/4 max-sm:w-4/5"
+			onSubmit={handleSubmit}>
 			<div className="flex flex-col gap-4">
 				<div className="inputWrapper">
 					<div className="placeholderWrapper">

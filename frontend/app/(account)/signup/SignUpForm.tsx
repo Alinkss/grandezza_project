@@ -67,7 +67,9 @@ export default function SignUpForm() {
 	});
 
 	return (
-		<form className="flex flex-col gap-8 w-1/4" onSubmit={handleSubmit}>
+		<form
+			className="flex flex-col gap-8 w-1/4 max-sm:w-4/5"
+			onSubmit={handleSubmit}>
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-row items-center justify-between gap-12">
 					<div className="inputWrapper max-w-[42%]">

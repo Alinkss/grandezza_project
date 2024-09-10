@@ -5,7 +5,7 @@ export default function Footer() {
 	return (
 		<footer className="text-white bg-[#212529] py-8">
 			<div className="text-lg flex flex-col gap-8">
-				<div className="w-3/5 m-auto flex flex-row justify-around">
+				<div className="w-3/5 sm:m-auto flex flex-row justify-around max-sm:flex-col max-sm:w-full max-sm:gap-4">
 					<div className="footer-cell-wrapper">
 						<div className="footer-icon-wrapper">
 							<Image src="/geo.png" alt="#" width={75} height={75} />

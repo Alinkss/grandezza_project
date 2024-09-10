@@ -20,13 +20,11 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	//TODO:
-	//? add rating to pets and products
-	//? make responsive design
-	//? make refactoring
-
 	return (
 		<html lang="en">
+			<head>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			</head>
 			<body className="h-screen flex flex-col">
 				<div id="portal" className="fixed z-50" />
 				<StoreInitializer />
