@@ -1,7 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+import jwt
+from django.conf import settings
+import logging
 
+logger = logging.getLogger(__name__)
+
+from blog.views import get_user_by_jwt, decode_jwt
 from .models import Catalog, Pets, Breed, Coat, Size, Color, Fur, Gender, ContactUs, PetProd, ProductReview, ProdComment
 from shop.forms import ContactUsForm, RatingForm, CommentForm
 
@@ -327,26 +336,47 @@ def contact_us(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-
+@csrf_exempt
 def comments(request, prod_id):
+    logger.debug("Processing comments view")
+
+    token = request.headers.get('Authorization')
+
+    if token and token.startswith('Bearer '):
+        token = token[7:]
+        user = decode_jwt(token)
+        logger.debug(f"Authenticated User: {user}")
+    else:
+        logger.error("Token is missing or does not start with 'Bearer '")
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
     product = get_object_or_404(PetProd, id=prod_id)
-    comments = ProdComment.objects.filter(
-        product=product).order_by('-published_date')
+    comments = ProdComment.objects.filter(product=product).order_by('-published_date')
 
     if request.method == 'POST':
         comments_form = CommentForm(request.POST)
         if comments_form.is_valid():
-            comments = comments_form.save(commit=False)
-            comments.published_date = now()
-            comments.product = product
-            comments.save()
+            comment = comments_form.save(commit=False)
+            comment.published_date = now()
+            comment.product = product
+            comment.user = user
+            comment.save()
+
+            user_data = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email
+            }
 
             comments_data = {
-                'id': comments.id,
-                'user': comments.user.id,
-                'published_date': comments.published_date,
-                'product': comments.product.id,
-                'text': comments.text
+                'id': comment.id,
+                'user': user_data,
+                'published_date': comment.published_date.isoformat(),
+                'product_id': comment.product.id,
+                'text': comment.text,
             }
 
             return JsonResponse(comments_data)
@@ -358,7 +388,7 @@ def comments(request, prod_id):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-
+@csrf_exempt
 def get_product_comments(request, prod_id):
     product = get_object_or_404(PetProd, id=prod_id)
     comments = ProdComment.objects.filter(
@@ -369,27 +399,3 @@ def get_product_comments(request, prod_id):
     }
 
     return JsonResponse(context)
-
-# def comments(request, prod_id):
-#     product = get_object_or_404(PetProd, id=prod_id)
-#     comments = ProdComment.objects.filter(product=product).order_by('-published_date')
-
-#     if request.method == 'POST':
-#         comments_form = CommentForm(request.POST)
-#         if comments_form.is_valid():
-#             comments = comments_form.save(commit=False)
-#             comments.user = request.user
-#             comments.published_date = now()
-#             comments.product = product
-
-#             return redirect('comments', prod_id=prod_id)
-#     else:
-#         comments_form = CommentForm()
-
-#     context = {
-#         'comments': comments,
-#         'product': product,
-#         'comments_form': comments_form
-#     }
-
-#     return render(request, 'shop/product/for_pet.html', context)

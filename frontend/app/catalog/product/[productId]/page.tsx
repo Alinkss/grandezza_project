@@ -33,7 +33,7 @@ export default async function ProductPage({ params: { productId } }: Props) {
 			const authorname = await axios
 				.get(
 					process.env.NEXT_PUBLIC_BASE_SERVER_URL +
-						'/bloguser/' +
+						'/blog/user/' +
 						comment.user_id
 				)
 				.then((res) => res.data.user.username);

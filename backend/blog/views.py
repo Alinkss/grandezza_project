@@ -15,6 +15,12 @@ from django.conf import settings
 import jwt
 from datetime import datetime, timedelta
 from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
+import logging
+
+logger = logging.getLogger(__name__)
+from django.contrib.auth import get_user_model
+
 
 from blog.models import Category, Post, Tag, Comments, Adress, PostImage, Profile
 from blog.forms import PostForm, PostImageForm, ImageFormSet, CommentsForm, AvatarForm, UserRegister, UserUpdateForm, AdressForm, AdressFormSet, LoginForm, JwtForm
@@ -433,15 +439,51 @@ def jwt_token(user):
     return token
 
 
+# def get_user_by_jwt(request):
+#     if request.method == 'POST':
+#         jwt_form = JwtForm(request.POST)
+#         if jwt_form.is_valid():
+#             token = jwt_form.cleaned_data['token']
+
+#             userdata = jwt.decode(
+#                 token, settings.JWT_SECRET_KEY, algorithms='HS256')
+#             return JsonResponse(userdata)
+
+def decode_jwt(token):
+    try:
+        payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=['HS256'])
+        user = get_user_model().objects.get(id=payload['user_id'])
+        return user
+    except jwt.ExpiredSignatureError:
+        logger.error("Token has expired")
+        return None
+    except jwt.InvalidTokenError:
+        logger.error("Invalid token")
+        return None
+    except get_user_model().DoesNotExist:
+        logger.error("User does not exist")
+        return None
+
+@csrf_exempt
 def get_user_by_jwt(request):
     if request.method == 'POST':
-        jwt_form = JwtForm(request.POST)
-        if jwt_form.is_valid():
-            token = jwt_form.cleaned_data['token']
-
-            userdata = jwt.decode(
-                token, settings.JWT_SECRET_KEY, algorithms='HS256')
-            return JsonResponse(userdata)
+        form = JwtForm(request.POST)
+        if form.is_valid():
+            token = form.cleaned_data['token']
+            user = decode_jwt(token)
+            if user:
+                user_data = {
+                    'user_id': user.id,
+                    'username': user.username,
+                    'email': user.email
+                }
+                return JsonResponse({'user': user_data})
+            else:
+                return JsonResponse({'error': 'Invalid token'}, status=400)
+        else:
+            return JsonResponse({'error': 'Invalid form'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
 def registration(request):
@@ -520,7 +562,7 @@ def registration(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-
+@csrf_exempt
 def login_jwt(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
@@ -528,6 +570,10 @@ def login_jwt(request):
             username = login_form.cleaned_data['username']
             password = login_form.cleaned_data['password']
             user = authenticate(username=username, password=password)
+            
+            if user is not None:
+                user.last_login = now()
+                user.save()
 
             if user is not None:
                 token = jwt_token(user)
@@ -535,9 +581,10 @@ def login_jwt(request):
                 user_data = {
                     'id': user.id,
                     'username': user.username,
+                    'email': user.email,
                     'first_name': user.first_name,
                     'last_name': user.last_name,
-                    'email': user.email
+                    'is_staff': user.is_staff,
                 }
 
                 response_data = {
@@ -552,60 +599,6 @@ def login_jwt(request):
             return JsonResponse({'errors': login_form.errors.as_json()}, status=400)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
-
-# def registration(request):
-#     if request.method == 'POST':
-#         user_form = UserRegister(request.POST, request.FILES)
-#         adress_form = AdressForm(request.POST)
-
-#         if user_form.is_valid() and adress_form.is_valid():
-#             user = user_form.save(commit=False)
-#             user.save()
-#             profile = Profile.objects.create(
-#                 user=user,
-#                 avatar=user_form.cleaned_data.get('avatar'),
-#                 background_pic=user_form.cleaned_data.get('background_pic'),
-#                 telephone=user_form.cleaned_data.get('telephone')
-#             )
-#             profile.country.set(user_form.cleaned_data.get('country'))
-#             profile.city.set(user_form.cleaned_data.get('city'))
-#             profile.save()
-
-#             Adress.objects.create(
-#                 profile=profile,
-#                 private_house_number=user_form.cleaned_data.get('private_house_number'),
-#                 entrance_number=user_form.cleaned_data.get('entrance_number'),
-#                 flat_num=user_form.cleaned_data.get('flat_num'),
-#                 street=user_form.cleaned_data.get('street')
-#             )
-#             token = jwt_token(user)
-#             # login(request, user)
-#             subject = 'Welcome to Grandezza!'
-#             message = f"""
-#             Hi {user.username},
-#             Thank you for registration at our side!
-
-#             """
-#             email_from = settings.EMAIL_HOST_USER
-#             recipient_list = [user.email]
-#             send_mail(subject, message, email_from, recipient_list)
-#             return redirect('profile', user_id=user.id)
-#         else:
-#             print(user_form.errors)
-#             print(adress_form.errors)
-#             print(request.FILES)
-
-#     else:
-#         user_form = UserRegister()
-#         adress_form = AdressForm()
-
-#     context = {
-#         'user_form': user_form,
-#         'adress_form': adress_form,
-#     }
-
-#     return render(request, 'registration/register.html', context)
-
 
 def logout_jwt(request):
     if request.method == 'POST':
@@ -685,28 +678,6 @@ def update_profile(request):
             return JsonResponse(errors, status=400)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
-
-
-# @login_required
-# def update_profile(request):
-#     if request.method == 'POST':
-#         user_update_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
-
-#         if user_update_form.is_valid():
-#             user_update_form.save()
-#             return redirect('profile', user_id=request.user.pk)
-#         else:
-#             print(user_update_form.errors)
-
-#     else:
-#         user_update_form = UserUpdateForm(instance=request.user)
-
-#     context = {
-#         'user_update_form': user_update_form,
-#     }
-
-#     return render(request, 'registration/update_profile.html', context)
-
 
 @login_required
 def my_view(request):
