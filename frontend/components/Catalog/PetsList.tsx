@@ -6,6 +6,7 @@ import { paginate } from '@/assets/paginate';
 import { Category, Pet, Product } from '@/types/catalog';
 import { addToCart } from '@/app/store/storeUtils';
 import { ShowSuccessNotification } from '../PetPage/ShowSuccessNotification';
+import { store } from '@/app/store/store';
 
 interface Props {
 	pets: (Pet | Product)[];
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function PetsList({ pets, catagories }: Props) {
+	const isUserAuthorized = !!store.getState().user?.sessionId;
 	const [isOpenSuccessWindow, setIsOpenSuccessWindow] =
 		useState<boolean>(false);
 	const [currentPage, setCurrentPage] = useState<number>(1);
@@ -90,8 +92,9 @@ export default function PetsList({ pets, catagories }: Props) {
 							<div className="flex flex-row justify-between">
 								<p className="my-auto text-lg">${parseInt(pet.price)}</p>
 								<button
-									className="px-2 py-1 rounded-lg bg-[#e100ff] text-white font-semibold"
-									onClick={() => addPetToCart(pet)}>
+									className="px-2 py-1 rounded-lg bg-[#e100ff] disabled:bg-[#a442b0] text-white font-semibold"
+									onClick={() => addPetToCart(pet)}
+									disabled={!isUserAuthorized}>
 									Add to cart
 								</button>
 							</div>

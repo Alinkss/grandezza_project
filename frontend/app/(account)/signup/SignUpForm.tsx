@@ -40,7 +40,7 @@ export default function SignUpForm() {
 
 			const jwtToken = await axios
 				.post(
-					process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/blogregistration',
+					process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/blog/registration',
 					newUser
 				)
 				.then((res) => res.data.token);

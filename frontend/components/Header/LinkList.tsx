@@ -1,4 +1,5 @@
 'use client';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { store } from '@/app/store/store';
 import { logOutUser } from '@/app/store/storeUtils';
@@ -11,9 +12,9 @@ import {
 	DropdownTrigger,
 } from '@nextui-org/react';
 import useIsMobileDevice from '@/hooks/useIsMobileDevice';
-import { useEffect, useRef } from 'react';
 
 export default function LinkList() {
+	const isMobileDevice = useIsMobileDevice();
 	const didMount = useRef(false);
 	const isUserAuthorized = !!store.getState().user?.sessionId;
 	const router = useRouter();
@@ -26,13 +27,13 @@ export default function LinkList() {
 	};
 
 	useEffect(() => {
-		if (!didMount.current && isUserAuthorized) {
+		if (!didMount.current && isUserAuthorized && isMobileDevice) {
 			links.push({ link: '', title: 'LOG OUT' });
 			didMount.current = true;
 		}
 	}, []);
 
-	if (useIsMobileDevice()) {
+	if (isMobileDevice) {
 		return (
 			<Dropdown>
 				<DropdownTrigger>
