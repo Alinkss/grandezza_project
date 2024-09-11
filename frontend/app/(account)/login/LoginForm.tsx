@@ -29,7 +29,7 @@ export default function LoginForm() {
 
 			const jwtToken = await axios
 				.post(
-					process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/bloglogin_jwt',
+					process.env.NEXT_PUBLIC_BASE_SERVER_URL + '/blog/login_jwt',
 					loggingUser
 				)
 				.then((res) => res.data.token);

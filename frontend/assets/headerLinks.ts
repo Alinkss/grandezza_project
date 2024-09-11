@@ -12,10 +12,6 @@ const headerLinks = [
 		link: '/cart',
 	},
 	{
-		title: 'BLOG',
-		link: '/blog',
-	},
-	{
 		title: 'LOGIN',
 		link: '/login',
 	},
